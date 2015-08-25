@@ -17,6 +17,7 @@ dl {
   margin: 0;
   padding: 0;
   list-style: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .container {
   position: relative;
@@ -25,8 +26,10 @@ dl {
 .container .main-content {
   background-color: #fff;
 }
-a {
+a,
+input {
   text-decoration: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 /*妈妈测试样式*/
 #J_MotherInfo .container .main-content-bd {
@@ -149,7 +152,7 @@ progress::-webkit-progress-value {
 }
 .main-content-ft {
   width: 100%;
-  margin-top: 100px;
+  margin: 25px 0 50px 0;
   display: none;
 }
 .main-content-ft ul {
@@ -178,6 +181,80 @@ progress::-webkit-progress-value {
   text-align: center;
   float: right;
 }
+.baby-tree li {
+  width: 100%;
+}
+.baby-tree li a {
+  display: inline-block;
+  width: 20%;
+  margin-bottom: 15px;
+}
+.baby-tree li a img {
+  width: 100%;
+}
+.baby-tree .tree {
+  margin-top: 50px;
+}
+.baby-tree .tree img {
+  width: 50%;
+  display: block;
+  margin: 0 auto;
+}
+.tree .scale-img1 {
+  -webkit-animation: scaleImg1 2s ease-in-out;
+}
+.tree .scale-img2 {
+  -webkit-animation: scaleImg2 2s ease-in-out;
+}
+.tree .scale-img3 {
+  -webkit-animation: scaleImg3 2s ease-in-out;
+}
+.tree .scale-img4 {
+  -webkit-animation: scaleImg4 2s ease-in-out;
+}
+.tree .scale-img5 {
+  -webkit-animation: scaleImg5 2s ease-in-out;
+}
+@-webkit-keyframes scaleImg1 {
+  0% {
+    -webkit-transform: scale(1, 1);
+  }
+  100% {
+    -webkit-transform: scale(1.17, 1.17);
+  }
+}
+@-webkit-keyframes scaleImg2 {
+  0% {
+    -webkit-transform: scale(1, 1);
+  }
+  100% {
+    -webkit-transform: scale(1.13, 1.13);
+  }
+}
+@-webkit-keyframes scaleImg3 {
+  0% {
+    -webkit-transform: scale(1, 1);
+  }
+  100% {
+    -webkit-transform: scale(1.13, 1.13);
+  }
+}
+@-webkit-keyframes scaleImg4 {
+  0% {
+    -webkit-transform: scale(1, 1);
+  }
+  100% {
+    -webkit-transform: scale(1.11, 1.11);
+  }
+}
+@-webkit-keyframes scaleImg5 {
+  0% {
+    -webkit-transform: scale(1, 1);
+  }
+  100% {
+    -webkit-transform: scale(1.11, 1.11);
+  }
+}
 /*宝宝测试样式*/
 #J_BabyInfo .container .main-module-bd {
   display: none;
@@ -190,9 +267,10 @@ progress::-webkit-progress-value {
 .baby-part .baby-head3,
 .baby-part .baby-head4 {
   position: relative;
-  background: url('/images/gate1.png') 0 0 no-repeat;
-  background-size: 100% 100%;
-  height: 500px;
+}
+.baby-part .baby-head1 img {
+  width: 100%;
+  display: block;
 }
 .baby-part .baby-head1 a {
   position: absolute;
@@ -201,9 +279,9 @@ progress::-webkit-progress-value {
   width: 39%;
   height: 23%;
 }
-.baby-part .baby-head2 {
-  background: url('/images/gate2.png') 0 0 no-repeat;
-  background-size: 100% 100%;
+.baby-part .baby-head2 img {
+  width: 100%;
+  display: block;
 }
 .baby-part .baby-head2 a {
   position: absolute;
@@ -212,9 +290,9 @@ progress::-webkit-progress-value {
   width: 39%;
   height: 23%;
 }
-.baby-part .baby-head3 {
-  background: url('/images/gate3.png') 0 0 no-repeat;
-  background-size: 100% 100%;
+.baby-part .baby-head3 img {
+  width: 100%;
+  display: block;
 }
 .baby-part .baby-head3 a {
   position: absolute;
@@ -223,9 +301,9 @@ progress::-webkit-progress-value {
   width: 39%;
   height: 23%;
 }
-.baby-part .baby-head4 {
-  background: url('/images/gate4.png') 0 0 no-repeat;
-  background-size: 100% 100%;
+.baby-part .baby-head4 img {
+  width: 100%;
+  display: block;
 }
 .baby-part .baby-head4 a {
   position: absolute;
@@ -235,9 +313,17 @@ progress::-webkit-progress-value {
   height: 23%;
 }
 .main-module-bd .current-bg {
-  background: url('/images/bg.jpg') 0 0 no-repeat;
-  background-size: 100% 100%;
-  height: 500px;
+  position: relative;
+  overflow: hidden;
+}
+.main-module-bd .current-bg img {
+  width: 100%;
+  display: block;
+}
+.main-module-bd .current-bg .current-medio {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .choose {
   width: 100%;
@@ -253,18 +339,19 @@ progress::-webkit-progress-value {
 }
 .choose li a {
   display: block;
-  width: 140px;
-  height: 140px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   background: #fff;
   text-align: center;
   margin: 0 auto;
 }
-.choose a img {
-  width: 60%;
+.main-module-bd .current-bg .choose a img {
+  width: 80%;
   position: relative;
   top: 50%;
   -webkit-transform: translateY(-50%);
+  margin: 0 auto;
 }
 .suc-tip {
   position: absolute;
@@ -278,10 +365,21 @@ progress::-webkit-progress-value {
 .suc-tip img {
   width: 100%;
 }
-.test-part2 .choose a img,
-.test-part3 .choose a img,
-.test-part4 .choose a img {
-  width: 90%;
+.suc-tip .next-answer {
+  position: absolute;
+  bottom: 9%;
+  left: 31%;
+  width: 41%;
+  height: 33%;
+}
+.test-part2 .current-medio .choose a img {
+  width: 85%;
+}
+.test-part3 .current-medio .choose a img {
+  width: 100%;
+}
+.test-part4 .current-medio .choose a img {
+  width: 80%;
 }
 /*登录样式*/
 .login-box {
@@ -515,11 +613,56 @@ progress::-webkit-progress-value {
 .right-side .desc-info {
   padding: 5px 0;
   color: #838383;
-  word-break: break-all;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .right-side .title-info .bigger {
   background: #E60012;
+}
+/*顾问详情样式*/
+.advisers-detail ul li {
+  padding: 11px 0 14px 11px;
+}
+.advisers-detail li .left-side {
+  padding-left: 0;
+}
+.advisers-detail li .right-side {
+  padding: 10px 0 0 0;
+  margin-left: 8px;
+}
+.advisers-detail .right-side .desc-info {
+  line-height: 23px;
+}
+.advisers-detail .right-side .work-age,
+.advisers-detail .right-side .age-group {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.advisers-detail li.detail-content {
+  padding: 0;
+  color: #404040;
+  letter-spacing: 2px;
+}
+.advisers-detail .detail-content dl {
+  padding: 28px 17px 10px 17px;
+}
+.advisers-detail .detail-content dl dt {
+  margin-bottom: 8px;
+}
+.advisers-detail .detail-content dd .detail-info {
+  padding-bottom: 30px;
+  line-height: 25px;
+}
+.advisers-detail .detail-content dd .seek-link a {
+  display: block;
+  width: 100%;
+  height: 45px;
+  line-height: 45px;
+  background: -webkit-linear-gradient(top, #bcee07 0%, #abd11c 100%);
+  -webkit-box-shadow: 0px 4px 0px #C6C6C6;
+  border-radius: 50px;
+  text-align: center;
+  color: #4B5F00;
+  letter-spacing: 2px;
+  font-size: 16px;
 }
 /*设备兼容*/
