@@ -21,7 +21,7 @@ define(function (require, exports, module) {
             return '';
         }
     };
-    
+
     var global = {
         token: Cookie.get('token'),
         kidId: '',
@@ -955,49 +955,51 @@ define(function (require, exports, module) {
 
     //'一键登录'交互
     if ($('#J_Login').length) {
-        $.preview({
-            content: Mustache.render(tpl.loginTpl.join('')),
-            title: '登录提示',
-            lock: true,
-            okText: '一键登录',
-            okCallBack: true,
-            ok: function () {
-                var $mobile = $('#J_Mobile');
-                var $codeNumber = $('#J_CodeNumber');
+        $('#J_LoginBtn').on('click',function(){
+            $.preview({
+                content: Mustache.render(tpl.loginTpl.join('')),
+                title: '登录提示',
+                lock: true,
+                okText: '一键登录',
+                okCallBack: true,
+                ok: function () {
+                    var $mobile = $('#J_Mobile');
+                    var $codeNumber = $('#J_CodeNumber');
 
-                if ($.trim($mobile.val()) === '' || !(/^(13[0-9]|14[57]|15[012356789]|18[0-9]|17[0-9])\d{8}$/.test($.trim($mobile.val())))) {
-                    $('#J_ErrorTip').text('请输入正确的手机号码');
-                    return false;
-                } else if ($.trim($codeNumber.val()) === '') {
-                    $('#J_ErrorTip').text('请输入正确的短信密码');
-                    return false;
-                } else {
-                    $('#J_ErrorTip').text('');
-                }
+                    if ($.trim($mobile.val()) === '' || !(/^(13[0-9]|14[57]|15[012356789]|18[0-9]|17[0-9])\d{8}$/.test($.trim($mobile.val())))) {
+                        $('#J_ErrorTip').text('请输入正确的手机号码');
+                        return false;
+                    } else if ($.trim($codeNumber.val()) === '') {
+                        $('#J_ErrorTip').text('请输入正确的短信密码');
+                        return false;
+                    } else {
+                        $('#J_ErrorTip').text('');
+                    }
 
-                if (!($('.rDialog-ok').hasClass('disabled'))) {
-                    $.ajax({
-                        type: 'post',
-                        url: $mobile.attr('data-url'),
-                        data: {mobile: $mobile.val(), code: $codeNumber.val()},
-                        dataType: 'json',
-                        success: function (res) {
-                            if (res.flag) {
-                                $('.rDialog-ok').addClass('disabled');
-                                window.location.href = res.url;
-                            } else {
-                                $('#J_ErrorTip').text(res.msg);
+                    if (!($('.rDialog-ok').hasClass('disabled'))) {
+                        $.ajax({
+                            type: 'post',
+                            url: $mobile.attr('data-url'),
+                            data: {mobile: $mobile.val(), code: $codeNumber.val()},
+                            dataType: 'json',
+                            success: function (res) {
+                                if (res.flag) {
+                                    $('.rDialog-ok').addClass('disabled');
+                                    window.location.href = res.url;
+                                } else {
+                                    $('#J_ErrorTip').text(res.msg);
+                                }
+                            },
+                            error: function (xhr, type) {
+                                $('#J_ErrorTip').text('请求服务器异常,稍后再试');
                             }
-                        },
-                        error: function (xhr, type) {
-                            $('#J_ErrorTip').text('请求服务器异常,稍后再试');
-                        }
-                    });
+                        });
+                    }
                 }
-            }
+            });
         });
 
-        $('#J_ValidateCode').on('click', function () {
+        $('#J_Login').delegate('#J_ValidateCode','click', function () {
             var $this = $(this);
             var $mobile = $('#J_Mobile');
 
@@ -1022,6 +1024,5 @@ define(function (require, exports, module) {
             });
         });
     }
-
     };
 });
