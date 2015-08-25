@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="yes" name="apple-touch-fullscreen"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>宝宝测试</title>
+    <link rel="stylesheet" type="text/css" href="../js/lib/preview/css/dialog-min.css">
+    <link href="../js/lib/mobiscroll/css/mobiscroll.zepto.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="../css/all.css">
+</head>
+<body id="J_BabyInfo">
+    <input type="hidden" id="dispatcher" value="home">
+    <section class="container">
+        <div class="main-content" id="J_MainContent" data-url="/api/customized/listQustions">
+            <div id="J_BabyPart1" class="baby-part">
+                <div class="baby-head1">
+                    <img src="../images/gate1.png">
+                    <a href="javascript:;" class="J_StartPart" data-part="1"></a>
+                </div>
+            </div>
+            <div class="main-module-bd J_ModuleBd" id="J_MainContent1">
+                <div id="J_TestPart1" class="test-part1"></div>
+            </div>
+
+
+            <div id="J_BabyPart2" class="baby-part" style="display:none;">
+                <div class="baby-head2">
+                    <img src="../images/gate2.png">
+                    <a href="javascript:;" class="J_StartPart" data-part="2"></a>
+                </div>
+            </div>
+            <div class="main-module-bd J_ModuleBd" id="J_MainContent2">
+                <div id="J_TestPart2" class="test-part2"></div>
+            </div>
+
+
+            <div id="J_BabyPart3" class="baby-part" style="display:none;">
+                <div class="baby-head3">
+                    <img src="../images/gate3.png">
+                    <a href="javascript:;"class="J_StartPart" data-part="3"></a>
+                </div>
+            </div>
+            <div class="main-module-bd J_ModuleBd" id="J_MainContent3">
+                <div id="J_TestPart3" class="test-part3"></div>
+            </div>
+
+            <div id="J_BabyPart4" class="baby-part" style="display:none;">
+                <div class="baby-head4">
+                    <img src="../images/gate4.png">
+                    <a href="javascript:;" class="J_StartPart" data-part="4"></a>
+                </div>
+            </div>
+            <div class="main-module-bd J_ModuleBd" id="J_MainContent4">
+                <div id="J_TestPart4" class="test-part4"></div>
+            </div>
+
+            <div class="suc-tip" id="J_SucTip">
+                <div id="J_Success1"><img src="../images/suc1.png"></div>
+                <div id="J_Success2"><img src="../images/suc2.png"><a href="javascript:;" class="next-answer"></a></div>
+            </div>
+        </div>
+    </section>
+    <script src="../js/lib/zepto/zepto.min.js" type="text/javascript"></script>
+    <script src="../js/lib/mobiscroll/js/mobiscroll.zepto.source.js" type="text/javascript"></script>
+    <script src="../js/seajs/sea.js?v=1.0.0" data-config="config.js?v=1.0.0" data-main="main.js?v=1.0.0" id="seajsFile"></script>
+</body>
+</html>

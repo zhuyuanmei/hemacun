@@ -9,8 +9,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
     <title>测试首页</title>
     <link rel="stylesheet" type="text/css" href="../css/all.css">
+    <link rel="stylesheet" type="text/css" href="../js/lib/preview/css/dialog-min.css">
 </head>
-<body>
+<body id="J_Login">
+<input type="hidden" id="dispatcher" value="home">
 <section class="container">
     <div class="main-content">
         <div class="status-items">
@@ -50,12 +52,14 @@
             </div>
             <div class="footer">
                 <ul>
-                    <li><a href="###" class="login">一键登录</a></li>
+                    <li><a href="javascript:;" id="J_LoginBtn" class="login">一键登录</a></li>
                     <li><span class="tip">登录后可获得测试报告</span></li>
                 </ul>
             </div>
         </div>
     </div>
 </section>
+<script src="../js/lib/zepto/zepto.min.js" type="text/javascript"></script>
+<script src="../js/seajs/sea.js?v=1.0.0" data-config="config.js?v=1.0.0" data-main="main.js?v=1.0.0" id="seajsFile"></script>
 </body>
 </html>
