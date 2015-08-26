@@ -34,6 +34,7 @@ input {
 /*妈妈测试样式*/
 #J_MotherInfo .container .main-content-bd {
   padding: 25px 23px 0 18px;
+  display: none;
 }
 progress {
   background-color: #eee;
@@ -89,6 +90,23 @@ progress::-webkit-progress-value {
 .radio-item dl dd li input {
   margin-right: 10px;
 }
+.radio-item dd ul li label {
+  vertical-align: middle;
+}
+.radio-item dd ul input[type="radio"] {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+  background: #fff;
+  border: 1px solid #CDCDCD;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+.radio-item dd ul input[type="radio"]:checked {
+  border: 5px solid #BCEF00;
+  outline: none;
+}
 .radio-item dd ul input[type="text"] {
   margin-top: 20px;
   width: 80%;
@@ -131,24 +149,20 @@ progress::-webkit-progress-value {
 .current-grade,
 .other-grade {
   width: 100%;
+  font-size: 12px;
 }
 .current-grade span,
 .other-grade span {
-  width: 32%;
+  width: 20%;
   display: inline-block;
-}
-.current-grade span.grade-item2,
-.other-grade span.grade-item2 {
-  text-align: center;
 }
 .current-grade span.grade-item3,
 .other-grade span.grade-item3 {
-  text-align: right;
+  text-align: center;
 }
 .current-grade span.current {
-  font-size: 16px;
+  font-size: 12px;
   font-weight: bold;
-  font-family: "Times New Roman", Georgia, Serif;
 }
 .main-content-ft {
   width: 100%;
@@ -327,7 +341,7 @@ progress::-webkit-progress-value {
 }
 .choose {
   width: 100%;
-  padding: 50px 0px;
+  padding: 15px 0px;
 }
 .choose ul {
   overflow: hidden;
@@ -381,6 +395,23 @@ progress::-webkit-progress-value {
 .test-part4 .current-medio .choose a img {
   width: 80%;
 }
+.current-medio img {
+  width: 100%;
+}
+.choose .choose-item {
+  -webkit-animation: scaleChoose 2s ease-in-out;
+}
+@-webkit-keyframes scaleChoose {
+  0% {
+    -webkit-transform: scale(1, 1);
+  }
+  50% {
+    -webkit-transform: scale(0.8, 0.8);
+  }
+  100% {
+    -webkit-transform: scale(1, 1);
+  }
+}
 /*登录样式*/
 .login-box {
   padding-top: 10px;
@@ -414,6 +445,9 @@ progress::-webkit-progress-value {
 .login-box .error-tip {
   color: #FF4657;
   font-size: 13px;
+}
+.login-box a.disabled {
+  background: #eee;
 }
 /*测试状态样式*/
 .main-content .status-items {
