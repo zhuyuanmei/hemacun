@@ -10,7 +10,7 @@ define(function (require, exports, module) {
     var Preview  = require('preview');
 
     var PREFIX = 'http://hemacun.com';
-    var TOKEN  = '72a6d8db-444a-4322-b82b-fa383f01750a';
+    var TOKEN  = '3cd2c0d5-1f68-4302-837c-fd18ae6dac3e';
 
     var Cookie = {
         get: function(name) {
@@ -27,6 +27,7 @@ define(function (require, exports, module) {
         kidId: '',
         optionId: '',
         answerId: '',
+        babyData:{},
         init: function() {
             var self = this;
 
@@ -113,6 +114,16 @@ define(function (require, exports, module) {
                 dataType: 'json',
                 success: function (res) {
 
+                }
+            });
+        },
+        parseBabyData: function(data) {
+            var self = this;
+
+            // 以题目 ID 为 KEY 记录数据
+            data.forEach(function(item, index) {
+                if (item.options.length === 2) {
+                    self.babyData[item.id] = item;
                 }
             });
         }
@@ -749,7 +760,7 @@ define(function (require, exports, module) {
             var $testPart3 = $('#J_TestPart3');
             var $testPart4 = $('#J_TestPart4');
 
-            //video完成后的点击交互
+            //medio完成后的点击交互
             $('#J_MainContent').delegate('.J_SubmitChoose','click',function(){
                 var $this = $(this);
                 var $curParent = $this.parents('.J_MediaItem');
@@ -771,7 +782,18 @@ define(function (require, exports, module) {
                             $('#J_Success1').trigger('click');
                         },3000);
                     }
-               }
+                }
+            });
+
+            //最后关卡处理
+            $('#J_MainContent').delegate('.J_LastPage','click',function(){
+                var $this = $(this);
+
+                if($this.attr('data-answer-id') === '1'){
+                    $('#J_Success3').show();
+                }else{
+                    $('#J_Success4').show();
+                }
             });
 
             //点击同关下道题目的交互
@@ -861,16 +883,30 @@ define(function (require, exports, module) {
                 if ($mediaItem.attr('data-video') === 'true') {
                     palyVideo(optionId, '', function() {
                         $mediaItem.find('.J_SubmitChoose').addClass('visibleChoose');
-
                         $mediaItem.find('.J_SubmitChoose').addClass('choose-item');
+
+                        var question = global.babyData[optionId];
+                        var options  = question.options;
+
+                        if (options[1].type === 'IMAGEBUTTOMANSWERLISTTEMPLATE') {
+                            $mediaItem.find('.J_SubmitChoose').removeClass('visibleChoose');
+                            $mediaItem.find('.J_SubmitChoose').addClass('J_LastPage');
+                        }
                     });
                 }
 
                 if ($mediaItem.attr('data-audio') === 'true') {
                     playAudio(optionId, '', function() {
                         $mediaItem.find('.J_SubmitChoose').addClass('visibleChoose');
-
                         $mediaItem.find('.J_SubmitChoose').addClass('choose-item');
+
+                        var question = global.babyData[optionId];
+                        var options  = question.options;
+
+                        if (options[1].type === 'IMAGEBUTTOMANSWERLISTTEMPLATE') {
+                            $mediaItem.find('.J_SubmitChoose').removeClass('visibleChoose');
+                            $mediaItem.find('.J_SubmitChoose').addClass('J_LastPage');
+                        }
                     });
                 }
             };
@@ -947,6 +983,9 @@ define(function (require, exports, module) {
                 },
                 success: function (res) {
                     if (res.returnCode == 0) {
+
+                        global.parseBabyData(res.body);
+
                         $babyPart1.hide();
                         $mainContent1.show();
 
@@ -964,7 +1003,7 @@ define(function (require, exports, module) {
                                 if(resultArr[i].options.length === 2){
                                     partsArr.push({id:resultArr[i].id,medioId:resultArr[i].options[0].id,videoUrl:resultArr[i].options[0].templateValue.videoUrl,audioUrl:resultArr[i].options[0].templateValue.audioUrl,answerId:resultArr[i].options[1].id,answerList:resultArr[i].options[1].templateValue.answers});
                                 }else if(resultArr[i].options.length === 1){
-                                    partsArr.push({id:resultArr[i].id,medioId:resultArr[i].options[0].id,videoUrl:resultArr[i].options[0].templateValue.videoUrl,audioUrl:resultArr[i].options[0].templateValue.audioUrl});
+                                    partsArr.push({id:resultArr[i].id,medioId:resultArr[i].options[0].id,videoUrl:resultArr[i].options[0].templateValue.videoUrl,audioUrl:resultArr[i].options[0].templateValue.audioUrl,type:resultArr[i].options[0].type});
                                 }
 
                                 splitArr.push(resultArr[i].id);

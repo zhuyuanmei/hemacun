@@ -386,6 +386,20 @@ progress::-webkit-progress-value {
   width: 41%;
   height: 33%;
 }
+.suc-tip .suc3{
+  position: absolute;
+  bottom: 12%;
+  left: 17%;
+  width: 65%;
+  height: 19%;
+}
+.suc-tip .suc4{
+  position: absolute;
+  bottom: 18%;
+  left: 17%;
+  width: 65%;
+  height: 19%;
+}
 .test-part2 .current-medio .choose a img {
   width: 85%;
 }
