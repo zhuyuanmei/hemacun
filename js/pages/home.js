@@ -156,7 +156,7 @@ define(function (require, exports, module) {
             '<dd>',
             '<ul>',
             '<li class="question-item">{{question}}</li>',
-            '<li><input class="J_ParentBirthDay" type="text" value="" readonly="readonly" placeholder="请选择家长的出生年份" onfocus="javascript:this.blur();"></li>',
+            '<li><input class="J_ParentBirthDay" type="text" value="1980" readonly="readonly" placeholder="请选择家长的出生年份" onfocus="javascript:this.blur();"></li>',
             '</ul>',
             '</dd>',
             '</dl>',
@@ -765,7 +765,7 @@ define(function (require, exports, module) {
                 var $this = $(this);
                 var $curParent = $this.parents('.J_MediaItem');
 
-                if($this.hasClass('visibleChoose')){
+                if($this.hasClass('visibleChoose') && !$this.hasClass('J_LastPage')){
                     var answerDetailId = $this.attr('data-answerId');
                     $curParent.attr('data-answerId',answerDetailId);
 
@@ -889,7 +889,6 @@ define(function (require, exports, module) {
                         var options  = question.options;
 
                         if (options[1].type === 'IMAGEBUTTOMANSWERLISTTEMPLATE') {
-                            $mediaItem.find('.J_SubmitChoose').removeClass('visibleChoose');
                             $mediaItem.find('.J_SubmitChoose').addClass('J_LastPage');
                         }
                     });
@@ -904,7 +903,6 @@ define(function (require, exports, module) {
                         var options  = question.options;
 
                         if (options[1].type === 'IMAGEBUTTOMANSWERLISTTEMPLATE') {
-                            $mediaItem.find('.J_SubmitChoose').removeClass('visibleChoose');
                             $mediaItem.find('.J_SubmitChoose').addClass('J_LastPage');
                         }
                     });
