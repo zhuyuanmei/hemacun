@@ -11,8 +11,15 @@ define(function (require, exports, module) {
 
     var PREFIX = 'http://hemacun.com';
     var TOKEN  = '92f12e54-1d89-4e33-a680-75d0cc9a0bb9';
-    
+
+    //跳转到首页路径
     var firstPageUrl = '/status';
+
+    //宝宝关卡'byebye'跳转路径
+    var byeUrl = '';
+
+    //宝宝关卡'查看测试报告'跳转路径
+    var testUrl = '';
 
     var Cookie = {
         get: function(name) {
@@ -790,9 +797,29 @@ define(function (require, exports, module) {
                 var $this = $(this);
 
                 if($this.attr('data-answer-id') === '1'){
-                    $('#J_Success3').show();
+                    var success3Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="/images/suc1.png"><a href="'+ byeUrl +'" id="J_Success3" class="next-answer"></a></div></div>';
+                    $.preview({
+                        content: success3Tpl,
+                        width:'300px',
+                        height:'308px',
+                        lock: true,
+                        setHeader:false,
+                        background:'true'
+                    });
+
+                    $('.rDialog-mask').show();
                 }else{
-                    $('#J_Success4').show();
+                    var success4Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="/images/suc1.png"><a href="'+ testUrl + '" id="J_Success4" class="next-answer"></a></div></div>';
+                    $.preview({
+                        content: success4Tpl,
+                        width:'300px',
+                        height:'308px',
+                        lock: true,
+                        setHeader:false,
+                        background:'true'
+                    });
+
+                    $('.rDialog-mask').show();
                 }
             });
 
@@ -891,7 +918,7 @@ define(function (require, exports, module) {
                         var question = global.babyData[optionId];
                         var options  = question.options;
 
-                        if (options[1].type === 'IMAGEBUTTOMANSWERLISTTEMPLATE') {
+                        if (part === 4) {
                             $mediaItem.find('.J_SubmitChoose').addClass('J_LastPage');
                         }
                     });
@@ -905,7 +932,7 @@ define(function (require, exports, module) {
                         var question = global.babyData[optionId];
                         var options  = question.options;
 
-                        if (options[1].type === 'IMAGEBUTTOMANSWERLISTTEMPLATE') {
+                        if (part === 4) {
                             $mediaItem.find('.J_SubmitChoose').addClass('J_LastPage');
                         }
                     });
