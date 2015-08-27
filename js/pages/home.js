@@ -10,7 +10,7 @@ define(function (require, exports, module) {
     var Preview  = require('preview');
 
     var PREFIX = 'http://hemacun.com';
-    var TOKEN  = '3cd2c0d5-1f68-4302-837c-fd18ae6dac3e';
+    var TOKEN  = '92f12e54-1d89-4e33-a680-75d0cc9a0bb9';
     
     var firstPageUrl = '/status';
 
@@ -172,6 +172,9 @@ define(function (require, exports, module) {
                 var left  = range * self.rangeWidth;
 
                 $button.css('left', left);
+
+                // 开始赋值
+                $this.parents('.J_RadioItem').attr('data-curValue', range + 1)
             });
         },
 
@@ -276,7 +279,9 @@ define(function (require, exports, module) {
             '<dd>',
             '<ul>',
             '<li class="question-item slide-item">{{question}}</li>',
-            '<li>',
+            '</ul>',
+            '</dd>',
+            '</dl>',
             '<div class="J_RangeSelector range-selector">',
             '<div class="range-selector-wrap">',
             '<div class="J_RangeSelectorHd range-selector-hd">',
@@ -302,10 +307,6 @@ define(function (require, exports, module) {
             '</div>',
             '</div>',
             '</div>',
-            '</li>',
-            '</ul>',
-            '</dd>',
-            '</dl>',
             '</div>'
         ],
         loginTpl: [

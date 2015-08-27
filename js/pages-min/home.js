@@ -10,7 +10,9 @@ define(function (require, exports, module) {
     var Preview  = require('preview');
 
     var PREFIX = 'http://hemacun.com';
-    var TOKEN  = '3cd2c0d5-1f68-4302-837c-fd18ae6dac3e';
+    var TOKEN  = '92f12e54-1d89-4e33-a680-75d0cc9a0bb9';
+    
+    var firstPageUrl = '/status';
 
     var Cookie = {
         get: function(name) {
@@ -131,6 +133,70 @@ define(function (require, exports, module) {
 
     global.init();
 
+    var rangeSelector = {
+        init: function() {
+            var self = this;
+
+            self.minOffsetX  = 20;
+            self.maxOffsetX  = $(window).width() - 60;
+            self.rangeWidth  = (self.maxOffsetX - self.minOffsetX) / 4;
+
+            self.bind();
+        },
+
+        bind: function() {
+            var self        = this;
+            var $motherInfo = $('#J_MotherInfo');
+
+            $motherInfo.delegate('.J_RangeSelector', 'touchmove', function(event) {
+                var $this   = $(this);
+                var $button = $this.find('.J_RangeSelectorButton');
+                var offsetX = self.fixOffsetX(event.changedTouches[0].clientX);
+
+                $button.css('position', 'absolute');
+                $button.css('left', offsetX);
+            });
+
+            $motherInfo.delegate('.J_RangeSelector', 'touchend', function(event) {
+                var $this   = $(this);
+                var $hd     = $this.find('.J_RangeSelectorHd');
+                var $ft     = $this.find('.J_RangeSelectorFt');
+                var $button = $this.find('.J_RangeSelectorButton');
+                var offsetX = self.fixOffsetX(event.changedTouches[0].clientX);
+
+                var range = (offsetX / self.rangeWidth).toFixed(0);
+
+                $hd.find('li').addClass('hide').eq(range).removeClass('hide');
+                $ft.find('li').removeClass('hide').eq(range).addClass('hide');
+
+                var left  = range * self.rangeWidth;
+
+                $button.css('left', left);
+
+                // 开始赋值
+                $this.parents('.J_RadioItem').attr('data-curValue', range + 1)
+            });
+        },
+
+        fixOffsetX: function(offsetX) {
+            var self = this;
+
+            offsetX -= 40;
+
+            if (offsetX < 0) {
+                offsetX = 0;
+            }
+
+            if (offsetX > self.maxOffsetX) {
+                offsetX = self.maxOffsetX;
+            }
+
+            return offsetX;
+        }
+    };
+
+    rangeSelector.init();
+
     var tpl = {
         answersTpl: [
             '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="" style="display:none;">',
@@ -213,30 +279,34 @@ define(function (require, exports, module) {
             '<dd>',
             '<ul>',
             '<li class="question-item slide-item">{{question}}</li>',
-            '<li>',
-            '<div class="current-grade J_CurrentGrade">',
-            '<span class="grade-item1 J_CurrentGrade1">&nbsp;</span>',
-            '<span class="grade-item2 J_CurrentGrade2">&nbsp;</span>',
-            '<span class="grade-item3 J_CurrentGrade3 current">一般</span>',
-            '<span class="grade-item4 J_CurrentGrade4">&nbsp;</span>',
-            '<span class="grade-item5 J_CurrentGrade5">&nbsp;</span>',
-            '</div>',
-            '<section class="slide-container">',
-            '<div class="wrap J_Wrap">',
-            '<div class="box J_Box"></div>',
-            '</div>',
-            '</section>',
-            '<div class="other-grade">',
-            '<span class="grade-item1 J_OtherGrade1">非常不符</span>',
-            '<span class="grade-item2 J_OtherGrade2">有点不符</span>',
-            '<span class="grade-item3 J_OtherGrade3">&nbsp;</span>',
-            '<span class="grade-item4 J_OtherGrade4">有点符合</span>',
-            '<span class="grade-item5 J_OtherGrade5">非常符合</span>',
-            '</div>',
-            '</li>',
             '</ul>',
             '</dd>',
             '</dl>',
+            '<div class="J_RangeSelector range-selector">',
+            '<div class="range-selector-wrap">',
+            '<div class="J_RangeSelectorHd range-selector-hd">',
+            '<ul>',
+            '<li class="hide">非常不符</li>',
+            '<li class="hide">有点不符</li>',
+            '<li>一般</li>',
+            '<li class="hide">有点符合</li>',
+            '<li class="hide">非常符合</li>',
+            '</ul>',
+            '</div>',
+            '<div class="range-selector-bd">',
+            '<div class="J_RangeSelectorButton range-selector-button"></div>',
+            '</div>',
+            '<div class="J_RangeSelectorFt range-selector-ft">',
+            '<ul>',
+            '<li>非常不符</li>',
+            '<li>有点不符</li>',
+            '<li class="hide">一般</li>',
+            '<li>有点符合</li>',
+            '<li>非常符合</li>',
+            '</ul>',
+            '</div>',
+            '</div>',
+            '</div>',
             '</div>'
         ],
         loginTpl: [
@@ -258,7 +328,8 @@ define(function (require, exports, module) {
             '<img src="/images/bg.jpg">',
             '<div class="current-medio">',
             '{{#hasVideo}}',
-            '<video id="J_Video{{rootId}}" poster="" preload="auto" style="width:96%;margin:2%;" src="http://hemacun.com/{{videoUrl}}">',
+            '<img src="/images/video.png">',
+            '<video id="J_Video{{rootId}}" poster="" preload="auto" style="position:absolute;top:9%;left:4%;width:92%;" src="http://hemacun.com/{{videoUrl}}">',
             '<p>Your browser does not support the video tag.</p>',
             '</video>',
             '{{/hasVideo}}',
@@ -394,120 +465,6 @@ define(function (require, exports, module) {
                 }
             });
 
-            //'滑动效果'
-            $motherInfo.delegate('.J_Wrap', 'touchmove', function (e) {
-                var $this = $(this);
-                var $box = $this.find('.J_Box');
-
-                if (e.touches[0].pageX < 60 || e.touches[0].pageX > 250) {
-                    return false;
-                } else if (e.touches[0].pageX === 60) {
-                    $box.css('-webkit-transform', 'translate3d(0,0,0)');
-                } else if (e.touches[0].pageX === 250) {
-                    $box.css('-webkit-transform', 'translate3d(230px,0,0)');
-                } else {
-                    $box.css('-webkit-transform', 'translate3d('+ e.touches[0].pageX - 40 +'px,0,0)');
-                }
-            });
-
-            $motherInfo.delegate('.J_Wrap', 'touchend', function (e) {
-                var $this = $(this),
-                    $curParent = $this.parents('.J_RadioItem');
-
-                var $otherGrade1 = $curParent.find('.J_OtherGrade1');
-                var $otherGrade2 = $curParent.find('.J_OtherGrade2');
-                var $otherGrade3 = $curParent.find('.J_OtherGrade3');
-                var $otherGrade4 = $curParent.find('.J_OtherGrade4');
-                var $otherGrade5 = $curParent.find('.J_OtherGrade5');
-
-                var $currentGradeSpan = $curParent.find('.J_CurrentGrade span');
-
-                var $box = $this.find('.J_Box');
-
-                var $currentGrade1 = $curParent.find('.J_CurrentGrade1');
-                var $currentGrade2 = $curParent.find('.J_CurrentGrade2');
-                var $currentGrade3 = $curParent.find('.J_CurrentGrade3');
-                var $currentGrade4 = $curParent.find('.J_CurrentGrade4');
-                var $currentGrade5 = $curParent.find('.J_CurrentGrade5');
-
-                if (e.changedTouches[0].pageX < 80) {
-                    $box.css({'-webkit-transform': 'translate3d(20px,0,0)', '-webkit-transition-duration': '300ms'});
-
-                    $otherGrade1.text('');
-                    $otherGrade2.text('有点不符');
-                    $otherGrade3.text('一般');
-                    $otherGrade4.text('有点符合');
-                    $otherGrade5.text('非常符合');
-
-                    $currentGradeSpan.text('');
-                    $currentGradeSpan.removeClass('current');
-                    $currentGrade1.text('非常不符');
-                    $currentGrade1.addClass('current');
-
-                    $curParent.attr('data-curValue',1);
-                }else if(e.changedTouches[0].pageX >= 80 && e.changedTouches[0].pageX < 135){
-                    $box.css({'-webkit-transform': 'translate3d(62.5px,0,0)', '-webkit-transition-duration': '300ms'});
-
-                    $otherGrade1.text('非常不符');
-                    $otherGrade2.text('');
-                    $otherGrade3.text('一般');
-                    $otherGrade4.text('有点符合');
-                    $otherGrade5.text('非常符合');
-
-                    $currentGradeSpan.text('');
-                    $currentGradeSpan.removeClass('current');
-                    $currentGrade2.text('有点不符');
-                    $currentGrade2.addClass('current');
-
-                    $curParent.attr('data-curValue',2);
-                }else if (e.changedTouches[0].pageX >= 135 && e.changedTouches[0].pageX <= 205) {
-                    $box.css({'-webkit-transform': 'translate3d(125px,0,0)', '-webkit-transition-duration': '300ms'});
-
-                    $otherGrade1.text('非常不符');
-                    $otherGrade2.text('有点不符');
-                    $otherGrade3.text('');
-                    $otherGrade4.text('有点符合');
-                    $otherGrade5.text('非常符合');
-
-                    $currentGradeSpan.text('');
-                    $currentGradeSpan.removeClass('current');
-                    $currentGrade3.text('一般');
-                    $currentGrade3.addClass('current');
-
-                    $curParent.attr('data-curValue',3);
-                }else if(e.changedTouches[0].pageX >= 205 && e.changedTouches[0].pageX <= 270){
-                    $box.css({'-webkit-transform': 'translate3d(187.5px,0,0)', '-webkit-transition-duration': '300ms'});
-
-                    $otherGrade1.text('非常不符');
-                    $otherGrade2.text('有点不符');
-                    $otherGrade3.text('一般');
-                    $otherGrade4.text('');
-                    $otherGrade5.text('非常符合');
-
-                    $currentGradeSpan.text('');
-                    $currentGradeSpan.removeClass('current');
-                    $currentGrade4.text('有点符合');
-                    $currentGrade4.addClass('current');
-
-                    $curParent.attr('data-curValue',4);
-                }else if (e.changedTouches[0].pageX > 270) {
-                    $box.css({'-webkit-transform': 'translate3d(230px,0,0)', '-webkit-transition-duration': '300ms'});
-
-                    $otherGrade1.text('非常不符');
-                    $otherGrade2.text('有点不符');
-                    $otherGrade3.text('一般');
-                    $otherGrade4.text('有点符合');
-                    $otherGrade5.text('');
-
-                    $currentGradeSpan.text('');
-                    $currentGradeSpan.removeClass('current');
-                    $currentGrade5.text('非常符合');
-                    $currentGrade5.addClass('current');
-
-                    $curParent.attr('data-curValue',5);
-                }
-            });
-
             //'next键'交互
             $contentFt.delegate('#J_CommerFooter', 'click', function () {
                 var $this = $(this);
@@ -534,8 +491,16 @@ define(function (require, exports, module) {
                     }else if(parseInt(curId) === ($testPart1.find('.J_RadioItem').length + $testPart2.find('.J_RadioItem').length)){
                         $contentFt.hide();
 
-                        //跳转到首页 ??
-                        window.location.href = '/status';
+                        //跳转到首页
+                        var motherEndTpl = '<div class="mother-end"><img src="/images/status1.png"><a href="' + firstPageUrl + '" class="mother-end-btn"></a></div>';
+                        $.preview({
+                            content: motherEndTpl,
+                            width:'300px',
+                            height:'308px',
+                            lock: true,
+                            setHeader:false,
+                            background:'true'
+                        });
                     }else{
                         nextId = parseInt(curId);
                         $($('.J_RadioItem')[nextId]).show();
@@ -788,15 +753,33 @@ define(function (require, exports, module) {
 
                     if($curParent.attr('data-arrLength') === $curParent.attr('data-currentIndex')){
                         //关卡结果浮层
-                        $('#J_SucTip').css('top','20px');
-                        $('#J_Success2').show();
+                         var success2Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="/images/suc2.png"><a href="javascript:;" id="J_Success2" class="next-answer"></a></div></div>';
+                        $.preview({
+                            content: success2Tpl,
+                            width:'300px',
+                            height:'308px',
+                            lock: true,
+                            setHeader:false,
+                            background:'true'
+                        });
+
+                        $('.rDialog-mask').show();
                     }else{
                         //继续答题浮层
-                        $('#J_SucTip').css('top','23%');
-                        $('#J_Success1').show();
+                        var success1Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="/images/suc1.png"><a href="javascript:;" id="J_Success1" class="next-answer"></a></div></div>';
+                        $.preview({
+                            content: success1Tpl,
+                            width:'300px',
+                            height:'308px',
+                            lock: true,
+                            setHeader:false,
+                            background:'true'
+                        });
+
+                        $('.rDialog-mask').show();
 
                         setTimeout(function(){
-                            $('#J_Success1').trigger('click');
+                            $('#J_Success1').trigger('click')
                         },3000);
                     }
                 }
@@ -814,7 +797,10 @@ define(function (require, exports, module) {
             });
 
             //点击同关下道题目的交互
-            $('#J_MainContent').delegate('#J_Success1','click',function(){
+            $('#J_BabyInfo').delegate('#J_Success1','click',function(){
+                $('.rDialog-mask').hide();
+                $('.rDialog').remove();
+                
                 var $this      = $(this);
                 var $testPart  = $('#J_TestPart' + util.part);
                 var partArr    = util['partArr' + util.part];
@@ -955,7 +941,10 @@ define(function (require, exports, module) {
             };
 
             //点击下关的交互
-            $('#J_MainContent').delegate('#J_Success2','click',function(){
+            $('#J_BabyInfo').delegate('#J_Success2','click',function(){
+                $('.rDialog-mask').hide();
+                $('.rDialog').remove();
+                
                 var $this = $(this);
                 var curModuleIndex;
 
