@@ -149,7 +149,7 @@ define(function (require, exports, module) {
             '</div>'
         ],
         yearSelectTpl: [
-            '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="" style="display:none;">',
+            '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="1980" style="display:none;">',
             '<header><progress value="{{id}}" max="17"></progress></header>',
             '<dl>',
             '<dt>{{id}}.</dt>',
