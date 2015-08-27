@@ -11,6 +11,8 @@ define(function (require, exports, module) {
 
     var PREFIX = 'http://hemacun.com';
     var TOKEN  = '3cd2c0d5-1f68-4302-837c-fd18ae6dac3e';
+    
+    var firstPageUrl = '/status';
 
     var Cookie = {
         get: function(name) {
@@ -534,8 +536,16 @@ define(function (require, exports, module) {
                     }else if(parseInt(curId) === ($testPart1.find('.J_RadioItem').length + $testPart2.find('.J_RadioItem').length)){
                         $contentFt.hide();
 
-                        //跳转到首页 ??
-                        window.location.href = '/status';
+                        //跳转到首页
+                        var motherEndTpl = '<div class="mother-end"><img src="/images/status1.png"><a href="' + firstPageUrl + '" class="mother-end-btn"></a></div>';
+                        $.preview({
+                            content: motherEndTpl,
+                            width:'300px',
+                            height:'308px',
+                            lock: true,
+                            setHeader:false,
+                            background:'true'
+                        });
                     }else{
                         nextId = parseInt(curId);
                         $($('.J_RadioItem')[nextId]).show();
