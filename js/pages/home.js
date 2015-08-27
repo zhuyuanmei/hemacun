@@ -799,7 +799,7 @@ define(function (require, exports, module) {
 
                     if($curParent.attr('data-arrLength') === $curParent.attr('data-currentIndex')){
                         //关卡结果浮层
-                        var success2Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="/images/suc2.png"><a href="javascript:;" id="J_Success2" class="next-answer"></a></div></div>';
+                         var success2Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="/images/suc2.png"><a href="javascript:;" id="J_Success2" class="next-answer"></a></div></div>';
                         $.preview({
                             content: success2Tpl,
                             width:'300px',
@@ -808,13 +808,24 @@ define(function (require, exports, module) {
                             setHeader:false,
                             background:'true'
                         });
+
+                        $('.rDialog-mask').show();
                     }else{
                         //继续答题浮层
-                        $('#J_SucTip').css('top','23%');
-                        $('#J_Success1').show();
+                        var success1Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="/images/suc1.png"><a href="javascript:;" id="J_Success1" class="next-answer"></a></div></div>';
+                        $.preview({
+                            content: success1Tpl,
+                            width:'300px',
+                            height:'308px',
+                            lock: true,
+                            setHeader:false,
+                            background:'true'
+                        });
+
+                        $('.rDialog-mask').show();
 
                         setTimeout(function(){
-                            $('#J_Success1').trigger('click');
+                            $('#J_Success1').trigger('click')
                         },3000);
                     }
                 }
@@ -832,7 +843,10 @@ define(function (require, exports, module) {
             });
 
             //点击同关下道题目的交互
-            $('#J_MainContent').delegate('#J_Success1','click',function(){
+            $('#J_BabyInfo').delegate('#J_Success1','click',function(){
+                $('.rDialog-mask').hide();
+                $('.rDialog').remove();
+                
                 var $this      = $(this);
                 var $testPart  = $('#J_TestPart' + util.part);
                 var partArr    = util['partArr' + util.part];
@@ -974,7 +988,7 @@ define(function (require, exports, module) {
 
             //点击下关的交互
             $('#J_BabyInfo').delegate('#J_Success2','click',function(){
-                $('.rDialog-mask').remove();
+                $('.rDialog-mask').hide();
                 $('.rDialog').remove();
                 
                 var $this = $(this);
