@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/all.css">
+    <style>
+        .hide {
+            visibility: hidden;
+        }
+        .range-selector {
+            margin: 0 auto;
+            width: 100%;
+        }
+        .range-selector-wrap {
+            margin: 0 20px;
+        }
+        .range-selector-hd, .range-selector-bd {
+            overflow: hidden;
+        }
+        .range-selector-hd li, .range-selector-ft li {
+            float: left;
+            width: 20%;
+            font-size: 12px;
+            text-align: center;
+        }
+        .range-selector-hd li {
+            font-weight: 700;
+        }
+        .range-selector-bd {
+            position: relative;
+            margin: 10px 0;
+            height: 40px;
+            border: 1px solid #DCDCDC;
+            border-radius: 30px;
+            background: #F5F5F5;
+        }
+        .range-selector-button {
+            margin: 0 auto;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #BCEF00;
+        }
+    </style>
+</head>
+<body id="J_MotherInfo">
+    <div class="J_RangeSelector range-selector">
+        <div class="range-selector-wrap">
+            <div class="J_RangeSelectorHd range-selector-hd">
+                <ul>
+                    <li class="hide">非常不符</li>
+                    <li class="hide">有点不符</li>
+                    <li>一般</li>
+                    <li class="hide">有点符合</li>
+                    <li class="hide">非常符合</li>
+                </ul>
+            </div>
+            <div class="range-selector-bd">
+                <div class="J_RangeSelectorButton range-selector-button"></div>
+            </div>
+            <div class="J_RangeSelectorFt range-selector-ft">
+                <ul>
+                    <li>非常不符</li>
+                    <li>有点不符</li>
+                    <li class="hide">一般</li>
+                    <li>有点符合</li>
+                    <li>非常符合</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="../js/lib/zepto/zepto.min.js" type="text/javascript"></script>
+    <script>
+        var rangeSelector = {
+            init: function() {
+                var self = this;
+
+                self.minOffsetX  = 20;
+                self.maxOffsetX  = $(window).width() - 60;
+                self.rangeWidth  = (self.maxOffsetX - self.minOffsetX) / 4;
+
+                self.bind();
+            },
+
+            bind: function() {
+                var self        = this;
+                var $motherInfo = $('#J_MotherInfo');
+
+                $motherInfo.delegate('.J_RangeSelector', 'touchmove', function(event) {
+                    var $this   = $(this);
+                    var $button = $this.find('.J_RangeSelectorButton');
+                    var offsetX = self.fixOffsetX(event.changedTouches[0].clientX);
+
+                    $button.css('position', 'absolute');
+                    $button.css('left', offsetX);
+                });
+
+                $motherInfo.delegate('.J_RangeSelector', 'touchend', function(event) {
+                    var $this   = $(this);
+                    var $hd     = $this.find('.J_RangeSelectorHd');
+                    var $ft     = $this.find('.J_RangeSelectorFt');
+                    var $button = $this.find('.J_RangeSelectorButton');
+                    var offsetX = self.fixOffsetX(event.changedTouches[0].clientX);
+
+                    var range = (offsetX / self.rangeWidth).toFixed(0);
+
+                    $hd.find('li').addClass('hide').eq(range).removeClass('hide');
+                    $ft.find('li').removeClass('hide').eq(range).addClass('hide');
+
+                    var left  = range * self.rangeWidth;
+
+                    $button.css('left', left);
+                });
+            },
+
+            fixOffsetX: function(offsetX) {
+                var self = this;
+
+                offsetX -= 40;
+
+                if (offsetX < 0) {
+                    offsetX = 0;
+                }
+
+                if (offsetX > self.maxOffsetX) {
+                    offsetX = self.maxOffsetX;
+                }
+
+                return offsetX;
+            }
+        };
+
+        rangeSelector.init();
+    </script>
+</body>
+</html>
