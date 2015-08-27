@@ -397,15 +397,16 @@ define(function (require, exports, module) {
             //'滑动效果'
             $motherInfo.delegate('.J_Wrap', 'touchmove', function (e) {
                 var $this = $(this);
+                var $box = $this.find('.J_Box');
 
                 if (e.touches[0].pageX < 60 || e.touches[0].pageX > 250) {
                     return false;
                 } else if (e.touches[0].pageX === 60) {
-                    $this.find('.J_Box').css('left', 0);
+                    $box.css('-webkit-transform', 'translate3d(0,0,0)');
                 } else if (e.touches[0].pageX === 250) {
-                    $this.find('.J_Box').css('left', 230);
+                    $box.css('-webkit-transform', 'translate3d(230px,0,0)');
                 } else {
-                    $this.find('.J_Box').css('left', e.touches[0].pageX - 40);
+                    $box.css('-webkit-transform', 'translate3d('+ e.touches[0].pageX - 40 +'px,0,0)');
                 }
             });
 
@@ -413,79 +414,95 @@ define(function (require, exports, module) {
                 var $this = $(this),
                     $curParent = $this.parents('.J_RadioItem');
 
+                var $otherGrade1 = $curParent.find('.J_OtherGrade1');
+                var $otherGrade2 = $curParent.find('.J_OtherGrade2');
+                var $otherGrade3 = $curParent.find('.J_OtherGrade3');
+                var $otherGrade4 = $curParent.find('.J_OtherGrade4');
+                var $otherGrade5 = $curParent.find('.J_OtherGrade5');
+
+                var $currentGradeSpan = $curParent.find('.J_CurrentGrade span');
+
+                var $box = $this.find('.J_Box');
+
+                var $currentGrade1 = $curParent.find('.J_CurrentGrade1');
+                var $currentGrade2 = $curParent.find('.J_CurrentGrade2');
+                var $currentGrade3 = $curParent.find('.J_CurrentGrade3');
+                var $currentGrade4 = $curParent.find('.J_CurrentGrade4');
+                var $currentGrade5 = $curParent.find('.J_CurrentGrade5');
+
                 if (e.changedTouches[0].pageX < 80) {
-                    $this.find('.J_Box').css({'left': 20, '-webkit-transition-duration': '300ms'});
+                    $box.css({'-webkit-transform': 'translate3d(20px,0,0)', '-webkit-transition-duration': '300ms'});
 
-                    $curParent.find('.J_OtherGrade1').text('');
-                    $curParent.find('.J_OtherGrade2').text('有点不符');
-                    $curParent.find('.J_OtherGrade3').text('一般');
-                    $curParent.find('.J_OtherGrade4').text('有点符合');
-                    $curParent.find('.J_OtherGrade5').text('非常符合');
+                    $otherGrade1.text('');
+                    $otherGrade2.text('有点不符');
+                    $otherGrade3.text('一般');
+                    $otherGrade4.text('有点符合');
+                    $otherGrade5.text('非常符合');
 
-                    $curParent.find('.J_CurrentGrade span').text('');
-                    $curParent.find('.J_CurrentGrade span').removeClass('current');
-                    $curParent.find('.J_CurrentGrade1').text('非常不符');
-                    $curParent.find('.J_CurrentGrade1').addClass('current');
+                    $currentGradeSpan.text('');
+                    $currentGradeSpan.removeClass('current');
+                    $currentGrade1.text('非常不符');
+                    $currentGrade1.addClass('current');
 
                     $curParent.attr('data-curValue',1);
                 }else if(e.changedTouches[0].pageX >= 80 && e.changedTouches[0].pageX < 135){
-                    $this.find('.J_Box').css({'left': 62.5, '-webkit-transition-duration': '300ms'});
+                    $box.css({'-webkit-transform': 'translate3d(62.5px,0,0)', '-webkit-transition-duration': '300ms'});
 
-                    $curParent.find('.J_OtherGrade1').text('非常不符');
-                    $curParent.find('.J_OtherGrade2').text('');
-                    $curParent.find('.J_OtherGrade3').text('一般');
-                    $curParent.find('.J_OtherGrade4').text('有点符合');
-                    $curParent.find('.J_OtherGrade5').text('非常符合');
+                    $otherGrade1.text('非常不符');
+                    $otherGrade2.text('');
+                    $otherGrade3.text('一般');
+                    $otherGrade4.text('有点符合');
+                    $otherGrade5.text('非常符合');
 
-                    $curParent.find('.J_CurrentGrade span').text('');
-                    $curParent.find('.J_CurrentGrade span').removeClass('current');
-                    $curParent.find('.J_CurrentGrade2').text('有点不符');
-                    $curParent.find('.J_CurrentGrade2').addClass('current');
+                    $currentGradeSpan.text('');
+                    $currentGradeSpan.removeClass('current');
+                    $currentGrade2.text('有点不符');
+                    $currentGrade2.addClass('current');
 
                     $curParent.attr('data-curValue',2);
                 }else if (e.changedTouches[0].pageX >= 135 && e.changedTouches[0].pageX <= 205) {
-                    $this.find('.J_Box').css({'left': 125, '-webkit-transition-duration': '300ms'});
+                    $box.css({'-webkit-transform': 'translate3d(125px,0,0)', '-webkit-transition-duration': '300ms'});
 
-                    $curParent.find('.J_OtherGrade1').text('非常不符');
-                    $curParent.find('.J_OtherGrade2').text('有点不符');
-                    $curParent.find('.J_OtherGrade3').text('');
-                    $curParent.find('.J_OtherGrade4').text('有点符合');
-                    $curParent.find('.J_OtherGrade5').text('非常符合');
+                    $otherGrade1.text('非常不符');
+                    $otherGrade2.text('有点不符');
+                    $otherGrade3.text('');
+                    $otherGrade4.text('有点符合');
+                    $otherGrade5.text('非常符合');
 
-                    $curParent.find('.J_CurrentGrade span').text('');
-                    $curParent.find('.J_CurrentGrade span').removeClass('current');
-                    $curParent.find('.J_CurrentGrade3').text('一般');
-                    $curParent.find('.J_CurrentGrade3').addClass('current');
+                    $currentGradeSpan.text('');
+                    $currentGradeSpan.removeClass('current');
+                    $currentGrade3.text('一般');
+                    $currentGrade3.addClass('current');
 
                     $curParent.attr('data-curValue',3);
                 }else if(e.changedTouches[0].pageX >= 205 && e.changedTouches[0].pageX <= 270){
-                    $this.find('.J_Box').css({'left': 187.5, '-webkit-transition-duration': '300ms'});
+                    $box.css({'-webkit-transform': 'translate3d(187.5px,0,0)', '-webkit-transition-duration': '300ms'});
 
-                    $curParent.find('.J_OtherGrade1').text('非常不符');
-                    $curParent.find('.J_OtherGrade2').text('有点不符');
-                    $curParent.find('.J_OtherGrade3').text('一般');
-                    $curParent.find('.J_OtherGrade4').text('');
-                    $curParent.find('.J_OtherGrade5').text('非常符合');
+                    $otherGrade1.text('非常不符');
+                    $otherGrade2.text('有点不符');
+                    $otherGrade3.text('一般');
+                    $otherGrade4.text('');
+                    $otherGrade5.text('非常符合');
 
-                    $curParent.find('.J_CurrentGrade span').text('');
-                    $curParent.find('.J_CurrentGrade span').removeClass('current');
-                    $curParent.find('.J_CurrentGrade4').text('有点符合');
-                    $curParent.find('.J_CurrentGrade4').addClass('current');
+                    $currentGradeSpan.text('');
+                    $currentGradeSpan.removeClass('current');
+                    $currentGrade4.text('有点符合');
+                    $currentGrade4.addClass('current');
 
                     $curParent.attr('data-curValue',4);
                 }else if (e.changedTouches[0].pageX > 270) {
-                    $this.find('.J_Box').css({'left': 230, '-webkit-transition-duration': '300ms'});
+                    $box.css({'-webkit-transform': 'translate3d(230px,0,0)', '-webkit-transition-duration': '300ms'});
 
-                    $curParent.find('.J_OtherGrade1').text('非常不符');
-                    $curParent.find('.J_OtherGrade2').text('有点不符');
-                    $curParent.find('.J_OtherGrade3').text('一般');
-                    $curParent.find('.J_OtherGrade4').text('有点符合');
-                    $curParent.find('.J_OtherGrade5').text('');
+                    $otherGrade1.text('非常不符');
+                    $otherGrade2.text('有点不符');
+                    $otherGrade3.text('一般');
+                    $otherGrade4.text('有点符合');
+                    $otherGrade5.text('');
 
-                    $curParent.find('.J_CurrentGrade span').text('');
-                    $curParent.find('.J_CurrentGrade span').removeClass('current');
-                    $curParent.find('.J_CurrentGrade5').text('非常符合');
-                    $curParent.find('.J_CurrentGrade5').addClass('current');
+                    $currentGradeSpan.text('');
+                    $currentGradeSpan.removeClass('current');
+                    $currentGrade5.text('非常符合');
+                    $currentGrade5.addClass('current');
 
                     $curParent.attr('data-curValue',5);
                 }
