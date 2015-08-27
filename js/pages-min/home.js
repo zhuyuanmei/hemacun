@@ -397,15 +397,16 @@ define(function (require, exports, module) {
             //'滑动效果'
             $motherInfo.delegate('.J_Wrap', 'touchmove', function (e) {
                 var $this = $(this);
+                var $box = $this.find('.J_Box');
 
                 if (e.touches[0].pageX < 60 || e.touches[0].pageX > 250) {
                     return false;
                 } else if (e.touches[0].pageX === 60) {
-                    $this.find('.J_Box').css('left', 0);
+                    $box.css('-webkit-transform', 'translate3d(0,0,0)');
                 } else if (e.touches[0].pageX === 250) {
-                    $this.find('.J_Box').css('left', 230);
+                    $box.css('-webkit-transform', 'translate3d(230px,0,0)');
                 } else {
-                    $this.find('.J_Box').css('left', e.touches[0].pageX - 40);
+                    $box.css('-webkit-transform', 'translate3d('+ e.touches[0].pageX - 40 +'px,0,0)');
                 }
             });
 
