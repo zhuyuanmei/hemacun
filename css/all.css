@@ -374,7 +374,6 @@ progress::-webkit-progress-value {
   top: 25%;
 }
 .suc-tip div {
-  display: none;
   width: 80%;
   margin: 0 auto;
 }
