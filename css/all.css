@@ -361,6 +361,20 @@ progress::-webkit-progress-value {
   width: 65%;
   height: 19%;
 }
+.suc-tip3 .next-answer{
+  position: absolute;
+  bottom: 12%;
+  left: 16%;
+  width: 68%;
+  height: 18%;
+}
+.suc-tip4 .next-answer{
+  position: absolute;
+  bottom: 18%;
+  left: 16%;
+  width: 68%;
+  height: 18%;
+}
 .test-part2 .current-medio .choose a img {
   width: 85%;
 }

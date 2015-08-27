@@ -181,7 +181,7 @@ define(function (require, exports, module) {
                 $button.css('left', left);
 
                 // 开始赋值
-                $this.parents('.J_RadioItem').attr('data-curValue', range + 1)
+                $this.parents('.J_RadioItem').attr('data-curValue', parseInt(range) + 1)
             });
         },
 
@@ -797,7 +797,7 @@ define(function (require, exports, module) {
                 var $this = $(this);
 
                 if($this.attr('data-answer-id') === '1'){
-                    var success3Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="/images/suc1.png"><a href="'+ byeUrl +'" id="J_Success3" class="next-answer"></a></div></div>';
+                    var success3Tpl = '<div class="suc-tip suc-tip3" id="J_SucTip"><div><img src="/images/suc3.png"><a href="'+ byeUrl +'" id="J_Success3" class="next-answer"></a></div></div>';
                     $.preview({
                         content: success3Tpl,
                         width:'300px',
@@ -809,7 +809,7 @@ define(function (require, exports, module) {
 
                     $('.rDialog-mask').show();
                 }else{
-                    var success4Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="/images/suc1.png"><a href="'+ testUrl + '" id="J_Success4" class="next-answer"></a></div></div>';
+                    var success4Tpl = '<div class="suc-tip suc-tip4" id="J_SucTip"><div><img src="/images/suc4.png"><a href="'+ testUrl + '" id="J_Success4" class="next-answer"></a></div></div>';
                     $.preview({
                         content: success4Tpl,
                         width:'300px',
