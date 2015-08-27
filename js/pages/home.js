@@ -799,8 +799,15 @@ define(function (require, exports, module) {
 
                     if($curParent.attr('data-arrLength') === $curParent.attr('data-currentIndex')){
                         //关卡结果浮层
-                        $('#J_SucTip').css('top','20px');
-                        $('#J_Success2').show();
+                        var success2Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="/images/suc2.png"><a href="javascript:;" id="J_Success2" class="next-answer"></a></div></div>';
+                        $.preview({
+                            content: success2Tpl,
+                            width:'300px',
+                            height:'308px',
+                            lock: true,
+                            setHeader:false,
+                            background:'true'
+                        });
                     }else{
                         //继续答题浮层
                         $('#J_SucTip').css('top','23%');
@@ -966,7 +973,10 @@ define(function (require, exports, module) {
             };
 
             //点击下关的交互
-            $('#J_MainContent').delegate('#J_Success2','click',function(){
+            $('#J_BabyInfo').delegate('#J_Success2','click',function(){
+                $('.rDialog-mask').remove();
+                $('.rDialog').remove();
+                
                 var $this = $(this);
                 var curModuleIndex;
 
