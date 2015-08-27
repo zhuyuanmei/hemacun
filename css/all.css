@@ -269,6 +269,8 @@ progress::-webkit-progress-value {
     -webkit-transform: scale(1.11, 1.11);
   }
 }
+.mother-end img{width:100%;}
+.mother-end a{position:absolute;top:63%;left:7%;width:85%;height:20%;display:block;}
 /*宝宝测试样式*/
 #J_BabyInfo .container .main-module-bd {
   display: none;
