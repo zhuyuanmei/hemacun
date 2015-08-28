@@ -10,16 +10,16 @@ define(function (require, exports, module) {
     var Preview  = require('preview');
 
     var PREFIX = 'http://hemacun.com';
-    var TOKEN  = '60355d52-7556-43b5-bc8e-307f07f93cca';
+    var TOKEN  = '085b715f-41d3-4404-b38b-641df5ebba2b';
 
     //跳转到首页路径
-    var firstPageUrl = '/status';
+    var firstPageUrl = '/question/index';
 
     //宝宝关卡'byebye'跳转路径
-    var byeUrl = '';
+    var byeUrl = '/question/report';
 
     //宝宝关卡'查看测试报告'跳转路径
-    var testUrl = '';
+    var testUrl = '/question/report';
 
     //设置Cookie的方法集合
     var Cookie = {
@@ -53,6 +53,7 @@ define(function (require, exports, module) {
 
     var global = {
         token: Cookie.get('token'),
+        prefix: '',
         kidId: '',
         optionId: '',
         answerId: '',
@@ -72,7 +73,8 @@ define(function (require, exports, module) {
                     if (data.kid) {
 
                         // 保存当前 kid
-                        self.kidId = data.kid;
+                        self.kidId  = data.kid;
+                        self.prefix = data.staticCdnUrlPrefix;
 
                         // 绑定答案提交事件
                         self.bind();
@@ -125,6 +127,11 @@ define(function (require, exports, module) {
                     }
                 });
             }
+        },
+        addPrefix:function(url) {
+            var self = this;
+
+            return self.prefix + url;
         },
         saveAnswer: function() {
             var self = this;
@@ -228,163 +235,173 @@ define(function (require, exports, module) {
 
     rangeSelector.init();
 
-    var tpl = {
-        answersTpl: [
-            '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="" style="display:none;">',
-            '<header><progress value="{{id}}" max="17"></progress></header>',
-            '<dl>',
-            '<dt>{{id}}.</dt>',
-            '<dd>',
-            '<ul>',
-            '<li class="question-item">{{question}}</li>',
-            '{{#reply}}',
-            '<li data-replyId="{{replyId}}"><input type="radio" name="{{className}}" id="J_AnswerItem_{{id}}_{{replyId}}"><label for="J_AnswerItem_{{id}}_{{replyId}}">{{description}}</label></li>',
-            '{{/reply}}',
-            '</ul>',
-            '</dd>',
-            '</dl>',
-            '</div>'
-        ],
-        yearSelectTpl: [
-            '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="1980" style="display:none;">',
-            '<header><progress value="{{id}}" max="17"></progress></header>',
-            '<dl>',
-            '<dt>{{id}}.</dt>',
-            '<dd>',
-            '<ul>',
-            '<li class="question-item">{{question}}</li>',
-            '<li><input class="J_ParentBirthDay" type="text" value="1980" readonly="readonly" placeholder="请选择家长的出生年份" onfocus="javascript:this.blur();"></li>',
-            '</ul>',
-            '</dd>',
-            '</dl>',
-            '</div>'
-        ],
-        inputTpl: [
-            '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="" style="display:none;">',
-            '<header><progress value="{{id}}" max="17"></progress></header>',
-            '<dl>',
-            '<dt>{{id}}.</dt>',
-            '<dd>',
-            '<ul>',
-            '<li class="question-item">{{question}}</li>',
-            '<li><input id="J_BabyName" type="text" class="nick-name" placeholder="请填写宝宝的昵称"></li>',
-            '</ul>',
-            '</dd>',
-            '</dl>',
-            '</div>'
-        ],
-        dateSelectTpl: [
-            '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="" style="display:none;">',
-            '<header><progress value="{{id}}" max="17"></progress></header>',
-            '<dl>',
-            '<dt>{{id}}.</dt>',
-            '<dd>',
-            '<ul>',
-            '<li class="question-item">{{question}}</li>',
-            '<li><input class="J_BabyBirthDay" type="text" readonly="readonly" placeholder="请选择宝宝的出生日期" onfocus="javascript:this.blur();"></li>',
-            '</ul>',
-            '</dd>',
-            '</dl>',
-            '</div>'
-        ],
-        babyTreeTpl:[
-            '<div class="radio-item baby-tree J_RadioItem" data-id="{{id}}" data-curValue="" style="display:none;">',
-            '<header><progress value="{{id}}" max="17"></progress></header>',
-            '<dl>',
-            '<dt>{{id}}.</dt>',
-            '<dd>',
-            '<ul id="J_DisabledTree">',
-            '<li class="question-item">{{question}}</li>',
-            '<li><a href="javascript:;" class="J_TreeItem" data-id="1" data-url="/images/tree/01_1.png"><img src="/images/tree/01.png"></a><a href="javascript:;" class="J_TreeItem" data-id="2" data-url="/images/tree/02_1.png"><img src="/images/tree/02.png"></a><a href="javascript:;" class="J_TreeItem" data-id="3" data-url="/images/tree/03_1.png"><img src="/images/tree/03.png"></a><a href="javascript:;" class="J_TreeItem" data-id="4" data-url="/images/tree/04_1.png"><img src="/images/tree/04.png"></a><a href="javascript:;" class="J_TreeItem" data-id="5" data-url="/images/tree/05_1.png"><img src="/images/tree/05.png"></a><a href="javascript:;" class="J_TreeItem" data-id="6" data-url="/images/tree/06_1.png"><img src="/images/tree/06.png"></a><a href="javascript:;" class="J_TreeItem" data-id="7" data-url="/images/tree/07_1.png"><img src="/images/tree/07.png"></a><a href="javascript:;" class="J_TreeItem" data-id="8" data-url="/images/tree/08_1.png"><img src="/images/tree/08.png"></a><a href="javascript:;" class="J_TreeItem" data-id="9" data-url="/images/tree/09_1.png"><img src="/images/tree/09.png"></a><a href="javascript:;" class="J_TreeItem" data-id="10" data-url="/images/tree/10_1.png"><img src="/images/tree/10.png"></a></li>',
-            '<li><div id="J_Tree" class="tree"><img src="/images/tree/tree.png"></div></li>',
-            '</ul>',
-            '</dd>',
-            '</dl>',
-            '</div>'
-        ],
-        degreeBarTpl: [
-            '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="3" style="display:none;">',
-            '<header><progress value="{{displayId}}" max="10"></progress></header>',
-            '<dl>',
-            '<dt>{{displayId}}.</dt>',
-            '<dd>',
-            '<ul>',
-            '<li class="question-item slide-item">{{question}}</li>',
-            '</ul>',
-            '</dd>',
-            '</dl>',
-            '<div class="J_RangeSelector range-selector">',
-            '<div class="range-selector-wrap">',
-            '<div class="J_RangeSelectorHd range-selector-hd">',
-            '<ul>',
-            '<li class="hide">非常不符</li>',
-            '<li class="hide">有点不符</li>',
-            '<li>一般</li>',
-            '<li class="hide">有点符合</li>',
-            '<li class="hide">非常符合</li>',
-            '</ul>',
-            '</div>',
-            '<div class="range-selector-bd">',
-            '<div class="J_RangeSelectorButton range-selector-button"></div>',
-            '</div>',
-            '<div class="J_RangeSelectorFt range-selector-ft">',
-            '<ul>',
-            '<li>非常不符</li>',
-            '<li>有点不符</li>',
-            '<li class="hide">一般</li>',
-            '<li>有点符合</li>',
-            '<li>非常符合</li>',
-            '</ul>',
-            '</div>',
-            '</div>',
-            '</div>',
-            '</div>'
-        ],
-        loginTpl: [
-            '<div class="login-box">',
-            '<ul>',
-            '<li>',
-            '<input type="text" id="J_Mobile" class="mobile" placeholder="请填写手机号码" data-url="../mockup/json/login.json">',
-            '</li>',
-            '<li>',
-            '<input type="text" id="J_CodeNumber" class="code" placeholder="请填写短信密码">',
-            '<a id="J_ValidateCode" class="get-code" data-url="../mockup/json/validateCode.json">获取短信密码</a>',
-            '</li>',
-            '<li id="J_ErrorTip" class="error-tip"></li>',
-            '</ul>',
-            '</div>'
-        ],
-        videoTpl:[
-            '<div id="J_MediaItem{{rootId}}" class="media-item J_MediaItem current-bg" data-id="{{rootId}}" data-medioId="{{medioId}}" {{#hasAnswerId}}data-answerId="{{answerId}}"{{/hasAnswerId}} data-arrLength="{{arrLength}}" data-currentIndex="{{currentIndex}}" data-video="{{hasVideo}}" data-audio="{{hasAudio}}" style="">',
-            '<img src="/images/bg.jpg">',
-            '<div class="current-medio">',
-            '{{#hasVideo}}',
-            '<img src="/images/video.png">',
-            '<video id="J_Video{{rootId}}" poster="" preload="auto" style="position:absolute;top:9%;left:4%;width:92%;" src="http://hemacun.com/{{videoUrl}}">',
-            '<p>Your browser does not support the video tag.</p>',
-            '</video>',
-            '{{/hasVideo}}',
-            '{{#hasAudio}}',
-            '<img src="/images/audio.png">',
-            '<audio id="J_Audio{{rootId}}" src="http://hemacun.com/{{audioUrl}}">',
-            'Your browser does not support the audio tag.',
-            '</audio>',
-            '{{/hasAudio}}',
-            '{{#hasAnswerId}}',
-            '<div class="choose">',
-            '<ul>',
-            '{{#answerList}}',
-            '<li><a href="javascript:;" class="J_SubmitChoose" data-option-id="{{rootId}}" data-answer-id="{{id}}"><img src="http://hemacun.com/{{imageUrl}}"></a></li>',
-            '{{/answerList}}',
-            '</ul>',
-            '</div>',
-            '{{/hasAnswerId}}',
-            '</div>',
-            '</div>'
-        ]
-    };
-
     var main = function() {
+        var tpl = {
+            answersTpl: [
+                '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="" style="display:none;">',
+                '<header><progress value="{{id}}" max="17"></progress></header>',
+                '<dl>',
+                '<dt>{{id}}.</dt>',
+                '<dd>',
+                '<ul>',
+                '<li class="question-item">{{question}}</li>',
+                '{{#reply}}',
+                '<li data-replyId="{{replyId}}"><input type="radio" name="{{className}}" id="J_AnswerItem_{{id}}_{{replyId}}"><label for="J_AnswerItem_{{id}}_{{replyId}}">{{description}}</label></li>',
+                '{{/reply}}',
+                '</ul>',
+                '</dd>',
+                '</dl>',
+                '</div>'
+            ],
+            yearSelectTpl: [
+                '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="1980" style="display:none;">',
+                '<header><progress value="{{id}}" max="17"></progress></header>',
+                '<dl>',
+                '<dt>{{id}}.</dt>',
+                '<dd>',
+                '<ul>',
+                '<li class="question-item">{{question}}</li>',
+                '<li><input class="J_ParentBirthDay" type="text" value="1980" readonly="readonly" placeholder="请选择家长的出生年份" onfocus="javascript:this.blur();"></li>',
+                '</ul>',
+                '</dd>',
+                '</dl>',
+                '</div>'
+            ],
+            inputTpl: [
+                '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="" style="display:none;">',
+                '<header><progress value="{{id}}" max="17"></progress></header>',
+                '<dl>',
+                '<dt>{{id}}.</dt>',
+                '<dd>',
+                '<ul>',
+                '<li class="question-item">{{question}}</li>',
+                '<li><input id="J_BabyName" type="text" class="nick-name" placeholder="请填写宝宝的昵称"></li>',
+                '</ul>',
+                '</dd>',
+                '</dl>',
+                '</div>'
+            ],
+            dateSelectTpl: [
+                '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="" style="display:none;">',
+                '<header><progress value="{{id}}" max="17"></progress></header>',
+                '<dl>',
+                '<dt>{{id}}.</dt>',
+                '<dd>',
+                '<ul>',
+                '<li class="question-item">{{question}}</li>',
+                '<li><input class="J_BabyBirthDay" type="text" readonly="readonly" placeholder="请选择宝宝的出生日期" onfocus="javascript:this.blur();"></li>',
+                '</ul>',
+                '</dd>',
+                '</dl>',
+                '</div>'
+            ],
+            babyTreeTpl:[
+                '<div class="radio-item baby-tree J_RadioItem" data-id="{{id}}" data-curValue="" style="display:none;">',
+                '<header><progress value="{{id}}" max="17"></progress></header>',
+                '<dl>',
+                '<dt>{{id}}.</dt>',
+                '<dd>',
+                '<ul id="J_DisabledTree">',
+                '<li class="question-item">{{question}}</li>',
+                '<li>',
+                '<a href="javascript:;" class="J_TreeItem" data-id="1" data-url="' + global.addPrefix('/images/tree/01_1.png') + '"><img src="' + global.addPrefix('/images/tree/01.png') + '"></a>',
+                '<a href="javascript:;" class="J_TreeItem" data-id="2" data-url="' + global.addPrefix('/images/tree/02_1.png') + '"><img src="' + global.addPrefix('/images/tree/02.png') + '"></a>',
+                '<a href="javascript:;" class="J_TreeItem" data-id="3" data-url="' + global.addPrefix('/images/tree/03_1.png') + '"><img src="' + global.addPrefix('/images/tree/03.png') + '"></a>',
+                '<a href="javascript:;" class="J_TreeItem" data-id="4" data-url="' + global.addPrefix('/images/tree/04_1.png') + '"><img src="' + global.addPrefix('/images/tree/04.png') + '"></a>',
+                '<a href="javascript:;" class="J_TreeItem" data-id="5" data-url="' + global.addPrefix('/images/tree/05_1.png') + '"><img src="' + global.addPrefix('/images/tree/05.png') + '"></a>',
+                '<a href="javascript:;" class="J_TreeItem" data-id="6" data-url="' + global.addPrefix('/images/tree/06_1.png') + '"><img src="' + global.addPrefix('/images/tree/06.png') + '"></a>',
+                '<a href="javascript:;" class="J_TreeItem" data-id="7" data-url="' + global.addPrefix('/images/tree/07_1.png') + '"><img src="' + global.addPrefix('/images/tree/07.png') + '"></a>',
+                '<a href="javascript:;" class="J_TreeItem" data-id="8" data-url="' + global.addPrefix('/images/tree/08_1.png') + '"><img src="' + global.addPrefix('/images/tree/08.png') + '"></a>',
+                '<a href="javascript:;" class="J_TreeItem" data-id="9" data-url="' + global.addPrefix('/images/tree/09_1.png') + '"><img src="' + global.addPrefix('/images/tree/09.png') + '"></a>',
+                '<a href="javascript:;" class="J_TreeItem" data-id="10" data-url="' + global.addPrefix('/images/tree/10_1.png') + '"><img src="' + global.addPrefix('/images/tree/10.png') + '"></a>',
+                '<li><div id="J_Tree" class="tree"><img src="' + global.addPrefix('/images/tree/tree.png') + '"></div></li>',
+                '</ul>',
+                '</dd>',
+                '</dl>',
+                '</div>'
+            ],
+            degreeBarTpl: [
+                '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="3" style="display:none;">',
+                '<header><progress value="{{displayId}}" max="10"></progress></header>',
+                '<dl>',
+                '<dt>{{displayId}}.</dt>',
+                '<dd>',
+                '<ul>',
+                '<li class="question-item slide-item">{{question}}</li>',
+                '</ul>',
+                '</dd>',
+                '</dl>',
+                '<div class="J_RangeSelector range-selector">',
+                '<div class="range-selector-wrap">',
+                '<div class="J_RangeSelectorHd range-selector-hd">',
+                '<ul>',
+                '<li class="hide">非常不符</li>',
+                '<li class="hide">有点不符</li>',
+                '<li>一般</li>',
+                '<li class="hide">有点符合</li>',
+                '<li class="hide">非常符合</li>',
+                '</ul>',
+                '</div>',
+                '<div class="range-selector-bd">',
+                '<div class="J_RangeSelectorButton range-selector-button"></div>',
+                '</div>',
+                '<div class="J_RangeSelectorFt range-selector-ft">',
+                '<ul>',
+                '<li>非常不符</li>',
+                '<li>有点不符</li>',
+                '<li class="hide">一般</li>',
+                '<li>有点符合</li>',
+                '<li>非常符合</li>',
+                '</ul>',
+                '</div>',
+                '</div>',
+                '</div>',
+                '</div>'
+            ],
+            loginTpl: [
+                '<div class="login-box">',
+                '<ul>',
+                '<li>',
+                '<input type="text" id="J_Mobile" class="mobile" placeholder="请填写手机号码" data-url="../mockup/json/login.json">',
+                '</li>',
+                '<li>',
+                '<input type="text" id="J_CodeNumber" class="code" placeholder="请填写短信密码">',
+                '<a id="J_ValidateCode" class="get-code" data-url="../mockup/json/validateCode.json">获取短信密码</a>',
+                '</li>',
+                '<li id="J_ErrorTip" class="error-tip"></li>',
+                '</ul>',
+                '</div>'
+            ],
+            videoTpl:[
+                '<div id="J_MediaItem{{rootId}}" class="media-item J_MediaItem current-bg" data-id="{{rootId}}" data-medioId="{{medioId}}" {{#hasAnswerId}}data-answerId="{{answerId}}"{{/hasAnswerId}} data-arrLength="{{arrLength}}" data-currentIndex="{{currentIndex}}" data-video="{{hasVideo}}" data-audio="{{hasAudio}}" style="">',
+                '<img src="' + global.addPrefix('/images/bg.jpg') + '">',
+                '<div class="current-medio">',
+                '{{#hasVideo}}',
+                '<img src="' + global.addPrefix('/images/video.png') + '">',
+                '<video id="J_Video{{rootId}}" poster="" preload="auto" style="position:absolute;top:9%;left:4%;width:92%;" src="' + PREFIX + '/{{videoUrl}}">',
+                '<p>Your browser does not support the video tag.</p>',
+                '</video>',
+                '{{/hasVideo}}',
+                '{{#hasAudio}}',
+                '<img src="' + global.addPrefix('/images/audio.png') + '">',
+                '<audio id="J_Audio{{rootId}}" src="' + PREFIX + '{{audioUrl}}">',
+                'Your browser does not support the audio tag.',
+                '</audio>',
+                '{{/hasAudio}}',
+                '{{#hasAnswerId}}',
+                '<div class="choose">',
+                '<ul>',
+                '{{#answerList}}',
+                '<li><a href="javascript:;" class="J_SubmitChoose" data-option-id="{{rootId}}" data-answer-id="{{id}}"><img src="' + PREFIX + '/{{imageUrl}}"></a></li>',
+                '{{/answerList}}',
+                '</ul>',
+                '</div>',
+                '{{/hasAnswerId}}',
+                '</div>',
+                '</div>'
+            ]
+        };
+
         //'妈妈测试'交互
         if ($('#J_MotherInfo').length) {
             var $motherInfo = $('#J_MotherInfo');
@@ -523,7 +540,7 @@ define(function (require, exports, module) {
                         $contentFt.hide();
 
                         //跳转到首页
-                        var motherEndTpl = '<div class="mother-end"><img src="/images/status1.png"><a href="' + firstPageUrl + '" class="mother-end-btn"></a></div>';
+                        var motherEndTpl = '<div class="mother-end"><img src="' + global.addPrefix("/images/status1.png") + '"><a href="' + firstPageUrl + '" class="mother-end-btn"></a></div>';
                         $.preview({
                             content: motherEndTpl,
                             width:'300px',
@@ -784,7 +801,7 @@ define(function (require, exports, module) {
 
                     if($curParent.attr('data-arrLength') === $curParent.attr('data-currentIndex')){
                         //关卡结果浮层
-                        var success2Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="/images/suc2.png"><a href="javascript:;" id="J_Success2" class="next-answer"></a></div></div>';
+                        var success2Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="' + global.addPrefix('/images/suc2.png') + '"><a href="javascript:;" id="J_Success2" class="next-answer"></a></div></div>';
                         $.preview({
                             content: success2Tpl,
                             width:'300px',
@@ -797,7 +814,7 @@ define(function (require, exports, module) {
                         $('.rDialog-mask').show();
                     }else{
                         //继续答题浮层
-                        var success1Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="/images/suc1.png"><a href="javascript:;" id="J_Success1" class="next-answer"></a></div></div>';
+                        var success1Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="' + global.addPrefix('/images/suc1.png') + '"><a href="javascript:;" id="J_Success1" class="next-answer"></a></div></div>';
                         $.preview({
                             content: success1Tpl,
                             width:'300px',
@@ -821,7 +838,7 @@ define(function (require, exports, module) {
                 var $this = $(this);
 
                 if($this.attr('data-answer-id') === '1'){
-                    var success3Tpl = '<div class="suc-tip suc-tip3" id="J_SucTip"><div><img src="/images/suc3.png"><a href="'+ byeUrl +'" id="J_Success3" class="next-answer"></a></div></div>';
+                    var success3Tpl = '<div class="suc-tip suc-tip3" id="J_SucTip"><div><img src="' + global.addPrefix('/images/suc3.png') + '"><a href="'+ byeUrl +'" id="J_Success3" class="next-answer"></a></div></div>';
                     $.preview({
                         content: success3Tpl,
                         width:'300px',
@@ -833,7 +850,7 @@ define(function (require, exports, module) {
 
                     $('.rDialog-mask').show();
                 }else{
-                    var success4Tpl = '<div class="suc-tip suc-tip4" id="J_SucTip"><div><img src="/images/suc4.png"><a href="'+ testUrl + '" id="J_Success4" class="next-answer"></a></div></div>';
+                    var success4Tpl = '<div class="suc-tip suc-tip4" id="J_SucTip"><div><img src="' + global.addPrefix('/images/suc4.png') + '"><a href="'+ testUrl + '" id="J_Success4" class="next-answer"></a></div></div>';
                     $.preview({
                         content: success4Tpl,
                         width:'300px',
