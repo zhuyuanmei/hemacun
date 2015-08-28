@@ -445,6 +445,7 @@ progress::-webkit-progress-value {
 }
 .login-box a.disabled {
   background: #eee;
+  color:#A9A9A9;
 }
 /*测试状态样式*/
 .main-content .status-items {
