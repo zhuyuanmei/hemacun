@@ -93,6 +93,8 @@
                     var $button = $this.find('.J_RangeSelectorButton');
                     var offsetX = self.fixOffsetX(event.changedTouches[0].clientX);
 
+                    event.preventDefault();
+
                     $button.css('position', 'absolute');
                     $button.css('left', offsetX);
                 });
@@ -105,6 +107,8 @@
                     var offsetX = self.fixOffsetX(event.changedTouches[0].clientX);
 
                     var range = (offsetX / self.rangeWidth).toFixed(0);
+
+                    event.preventDefault();
 
                     $hd.find('li').addClass('hide').eq(range).removeClass('hide');
                     $ft.find('li').removeClass('hide').eq(range).addClass('hide');

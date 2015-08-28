@@ -10,7 +10,7 @@ define(function (require, exports, module) {
     var Preview  = require('preview');
 
     var PREFIX = 'http://hemacun.com';
-    var TOKEN  = '92f12e54-1d89-4e33-a680-75d0cc9a0bb9';
+    var TOKEN  = '60355d52-7556-43b5-bc8e-307f07f93cca';
 
     //跳转到首页路径
     var firstPageUrl = '/status';
@@ -180,6 +180,8 @@ define(function (require, exports, module) {
                 var $button = $this.find('.J_RangeSelectorButton');
                 var offsetX = self.fixOffsetX(event.changedTouches[0].clientX);
 
+                event.preventDefault();
+
                 $button.css('position', 'absolute');
                 $button.css('left', offsetX);
             });
@@ -192,6 +194,8 @@ define(function (require, exports, module) {
                 var offsetX = self.fixOffsetX(event.changedTouches[0].clientX);
 
                 var range = (offsetX / self.rangeWidth).toFixed(0);
+
+                event.preventDefault();
 
                 $hd.find('li').addClass('hide').eq(range).removeClass('hide');
                 $ft.find('li').removeClass('hide').eq(range).addClass('hide');
@@ -780,7 +784,7 @@ define(function (require, exports, module) {
 
                     if($curParent.attr('data-arrLength') === $curParent.attr('data-currentIndex')){
                         //关卡结果浮层
-                         var success2Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="/images/suc2.png"><a href="javascript:;" id="J_Success2" class="next-answer"></a></div></div>';
+                        var success2Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="/images/suc2.png"><a href="javascript:;" id="J_Success2" class="next-answer"></a></div></div>';
                         $.preview({
                             content: success2Tpl,
                             width:'300px',
@@ -847,7 +851,7 @@ define(function (require, exports, module) {
             $('#J_BabyInfo').delegate('#J_Success1','click',function(){
                 $('.rDialog-mask').hide();
                 $('.rDialog').remove();
-                
+
                 var $this      = $(this);
                 var $testPart  = $('#J_TestPart' + util.part);
                 var partArr    = util['partArr' + util.part];
@@ -991,7 +995,7 @@ define(function (require, exports, module) {
             $('#J_BabyInfo').delegate('#J_Success2','click',function(){
                 $('.rDialog-mask').hide();
                 $('.rDialog').remove();
-                
+
                 var $this = $(this);
                 var curModuleIndex;
 

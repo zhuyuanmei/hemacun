@@ -10,7 +10,7 @@ define(function (require, exports, module) {
     var Preview  = require('preview');
 
     var PREFIX = 'http://hemacun.com';
-    var TOKEN  = '92f12e54-1d89-4e33-a680-75d0cc9a0bb9';
+    var TOKEN  = '60355d52-7556-43b5-bc8e-307f07f93cca';
 
     //跳转到首页路径
     var firstPageUrl = '/status';
@@ -21,7 +21,27 @@ define(function (require, exports, module) {
     //宝宝关卡'查看测试报告'跳转路径
     var testUrl = '';
 
+    //设置Cookie的方法集合
     var Cookie = {
+        add:function(name,value,expiresHours){
+            var cookieString=name+"="+escape(value);
+            //判断是否设置过期时间,0代表关闭浏览器时失效
+            if(expiresHours>0){
+                var date=new Date();
+                date.setTime(date.getTime()+expiresHours*1000);
+                cookieString=cookieString+";expires=" + date.toUTCString();
+            }
+            document.cookie=cookieString;
+        },
+        edit:function(name,value,expiresHours){
+            var cookieString=name+"="+escape(value);
+            if(expiresHours>0){
+                var date=new Date();
+                date.setTime(date.getTime()+expiresHours*1000); //单位是毫秒
+                cookieString=cookieString+";expires=" + date.toGMTString();
+            }
+            document.cookie=cookieString;
+        },
         get: function(name) {
             var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
             if (arr) {
@@ -160,6 +180,8 @@ define(function (require, exports, module) {
                 var $button = $this.find('.J_RangeSelectorButton');
                 var offsetX = self.fixOffsetX(event.changedTouches[0].clientX);
 
+                event.preventDefault();
+
                 $button.css('position', 'absolute');
                 $button.css('left', offsetX);
             });
@@ -172,6 +194,8 @@ define(function (require, exports, module) {
                 var offsetX = self.fixOffsetX(event.changedTouches[0].clientX);
 
                 var range = (offsetX / self.rangeWidth).toFixed(0);
+
+                event.preventDefault();
 
                 $hd.find('li').addClass('hide').eq(range).removeClass('hide');
                 $ft.find('li').removeClass('hide').eq(range).addClass('hide');
@@ -760,7 +784,7 @@ define(function (require, exports, module) {
 
                     if($curParent.attr('data-arrLength') === $curParent.attr('data-currentIndex')){
                         //关卡结果浮层
-                         var success2Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="/images/suc2.png"><a href="javascript:;" id="J_Success2" class="next-answer"></a></div></div>';
+                        var success2Tpl = '<div class="suc-tip" id="J_SucTip"><div><img src="/images/suc2.png"><a href="javascript:;" id="J_Success2" class="next-answer"></a></div></div>';
                         $.preview({
                             content: success2Tpl,
                             width:'300px',
@@ -827,7 +851,7 @@ define(function (require, exports, module) {
             $('#J_BabyInfo').delegate('#J_Success1','click',function(){
                 $('.rDialog-mask').hide();
                 $('.rDialog').remove();
-                
+
                 var $this      = $(this);
                 var $testPart  = $('#J_TestPart' + util.part);
                 var partArr    = util['partArr' + util.part];
@@ -971,7 +995,7 @@ define(function (require, exports, module) {
             $('#J_BabyInfo').delegate('#J_Success2','click',function(){
                 $('.rDialog-mask').hide();
                 $('.rDialog').remove();
-                
+
                 var $this = $(this);
                 var curModuleIndex;
 
@@ -1084,6 +1108,24 @@ define(function (require, exports, module) {
         }
 
         //'一键登录'交互
+        //倒计时函数
+        var countdown;
+        var setTime = function(obj){
+            countdown = Cookie.get("secondsremained");
+            if (countdown == 0) {
+                obj.removeClass('disabled');
+                obj.text('获取短信密码');
+                $('#J_ErrorTip').hide();
+                return false;
+            } else {
+                obj.addClass('disabled');
+                obj.text(countdown + 's后重新发送');
+                countdown --;
+                Cookie.edit("secondsremained",countdown,countdown+1);
+            }
+            setTimeout(function(){ setTime(obj) },1000); //每1000毫秒执行一次
+        };
+
         if ($('#J_Login').length) {
             $('#J_LoginBtn').on('click',function(){
                 $.preview({
@@ -1095,15 +1137,18 @@ define(function (require, exports, module) {
                     ok: function () {
                         var $mobile = $('#J_Mobile');
                         var $codeNumber = $('#J_CodeNumber');
+                        var $errorTip = $('#J_ErrorTip');
 
                         if ($.trim($mobile.val()) === '' || !(/^(13[0-9]|14[57]|15[012356789]|18[0-9]|17[0-9])\d{8}$/.test($.trim($mobile.val())))) {
-                            $('#J_ErrorTip').text('请输入正确的手机号码');
+                            $errorTip.text('请输入正确的手机号码');
+                            $errorTip.show();
                             return false;
                         } else if ($.trim($codeNumber.val()) === '') {
-                            $('#J_ErrorTip').text('请输入正确的短信密码');
+                            $errorTip.text('请输入正确的短信密码');
+                            $errorTip.show();
                             return false;
                         } else {
-                            $('#J_ErrorTip').text('');
+                            $errorTip.hide();
                         }
 
                         if (!($('.rDialog-ok').hasClass('disabled'))) {
@@ -1117,11 +1162,13 @@ define(function (require, exports, module) {
                                         $('.rDialog-ok').addClass('disabled');
                                         window.location.href = res.url;
                                     } else {
-                                        $('#J_ErrorTip').text(res.msg);
+                                        $errorTip.text(res.msg);
+                                        $errorTip.show();
                                     }
                                 },
                                 error: function (xhr, type) {
-                                    $('#J_ErrorTip').text('请求服务器异常,稍后再试');
+                                    $errorTip.text('请求服务器异常,稍后再试');
+                                    $errorTip.show();
                                 }
                             });
                         }
@@ -1141,6 +1188,7 @@ define(function (require, exports, module) {
                         $('#J_ErrorTip').text('');
                     }
 
+                    //获取短信密码ajax请求
                     $.ajax({
                         type: 'post',
                         url: $this.attr('data-url'),
@@ -1157,6 +1205,9 @@ define(function (require, exports, module) {
                             $('#J_ErrorTip').text('请求服务器异常,稍后再试');
                         }
                     });
+
+                    Cookie.add("secondsremained",60,60);//添加cookie记录,有效时间60s
+                    setTime($('#J_ValidateCode'));//开始倒计时
                 }
             });
         }
