@@ -312,6 +312,7 @@ progress::-webkit-progress-value {
   width: 50%;
   float: left;
   margin-bottom: 10px;
+  position:relative;
 }
 .choose li a {
   display: block;
@@ -321,6 +322,13 @@ progress::-webkit-progress-value {
   background: #fff;
   text-align: center;
   margin: 0 auto;
+}
+.choose li .choose-item:after{
+  content:url('../images/hand.png');
+  position:absolute;
+  bottom:-10%;
+  left:50%;
+  margin-left:-15px;
 }
 .main-module-bd .current-bg .choose a img {
   width: 80%;
