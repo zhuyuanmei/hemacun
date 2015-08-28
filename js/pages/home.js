@@ -384,7 +384,7 @@ define(function (require, exports, module) {
                 '{{/hasVideo}}',
                 '{{#hasAudio}}',
                 '<img src="' + global.addPrefix('/images/audio.png') + '">',
-                '<audio id="J_Audio{{rootId}}" src="' + PREFIX + '{{audioUrl}}">',
+                '<audio id="J_Audio{{rootId}}" src="' + PREFIX + '/{{audioUrl}}">',
                 'Your browser does not support the audio tag.',
                 '</audio>',
                 '{{/hasAudio}}',
