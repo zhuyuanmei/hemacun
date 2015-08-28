@@ -21,7 +21,27 @@ define(function (require, exports, module) {
     //宝宝关卡'查看测试报告'跳转路径
     var testUrl = '';
 
+    //设置Cookie的方法集合
     var Cookie = {
+        add:function(name,value,expiresHours){
+            var cookieString=name+"="+escape(value);
+            //判断是否设置过期时间,0代表关闭浏览器时失效
+            if(expiresHours>0){
+                var date=new Date();
+                date.setTime(date.getTime()+expiresHours*1000);
+                cookieString=cookieString+";expires=" + date.toUTCString();
+            }
+            document.cookie=cookieString;
+        },
+        edit:function(name,value,expiresHours){
+            var cookieString=name+"="+escape(value);
+            if(expiresHours>0){
+                var date=new Date();
+                date.setTime(date.getTime()+expiresHours*1000); //单位是毫秒
+                cookieString=cookieString+";expires=" + date.toGMTString();
+            }
+            document.cookie=cookieString;
+        },
         get: function(name) {
             var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
             if (arr) {
@@ -1084,6 +1104,24 @@ define(function (require, exports, module) {
         }
 
         //'一键登录'交互
+        //倒计时函数
+        var countdown;
+        var setTime = function(obj){
+            countdown = Cookie.get("secondsremained");
+            if (countdown == 0) {
+                obj.removeClass('disabled');
+                obj.text('获取短信密码');
+                $('#J_ErrorTip').hide();
+                return false;
+            } else {
+                obj.addClass('disabled');
+                obj.text(countdown + 's后重新发送');
+                countdown --;
+                Cookie.edit("secondsremained",countdown,countdown+1);
+            }
+            setTimeout(function(){ setTime(obj) },1000); //每1000毫秒执行一次
+        };
+
         if ($('#J_Login').length) {
             $('#J_LoginBtn').on('click',function(){
                 $.preview({
@@ -1095,15 +1133,18 @@ define(function (require, exports, module) {
                     ok: function () {
                         var $mobile = $('#J_Mobile');
                         var $codeNumber = $('#J_CodeNumber');
+                        var $errorTip = $('#J_ErrorTip');
 
                         if ($.trim($mobile.val()) === '' || !(/^(13[0-9]|14[57]|15[012356789]|18[0-9]|17[0-9])\d{8}$/.test($.trim($mobile.val())))) {
-                            $('#J_ErrorTip').text('请输入正确的手机号码');
+                            $errorTip.text('请输入正确的手机号码');
+                            $errorTip.show();
                             return false;
                         } else if ($.trim($codeNumber.val()) === '') {
-                            $('#J_ErrorTip').text('请输入正确的短信密码');
+                            $errorTip.text('请输入正确的短信密码');
+                            $errorTip.show();
                             return false;
                         } else {
-                            $('#J_ErrorTip').text('');
+                            $errorTip.hide();
                         }
 
                         if (!($('.rDialog-ok').hasClass('disabled'))) {
@@ -1117,11 +1158,13 @@ define(function (require, exports, module) {
                                         $('.rDialog-ok').addClass('disabled');
                                         window.location.href = res.url;
                                     } else {
-                                        $('#J_ErrorTip').text(res.msg);
+                                        $errorTip.text(res.msg);
+                                        $errorTip.show();
                                     }
                                 },
                                 error: function (xhr, type) {
-                                    $('#J_ErrorTip').text('请求服务器异常,稍后再试');
+                                    $errorTip.text('请求服务器异常,稍后再试');
+                                    $errorTip.show();
                                 }
                             });
                         }
@@ -1141,6 +1184,7 @@ define(function (require, exports, module) {
                         $('#J_ErrorTip').text('');
                     }
 
+                    //获取短信密码ajax请求
                     $.ajax({
                         type: 'post',
                         url: $this.attr('data-url'),
@@ -1157,6 +1201,9 @@ define(function (require, exports, module) {
                             $('#J_ErrorTip').text('请求服务器异常,稍后再试');
                         }
                     });
+
+                    Cookie.add("secondsremained",60,60);//添加cookie记录,有效时间60s
+                    setTime($('#J_ValidateCode'));//开始倒计时
                 }
             });
         }
