@@ -65,6 +65,9 @@ define(function (require, exports, module) {
             $.ajax({
                 url: PREFIX + '/api/user/getCurrentUser',
                 type: 'get',
+                data: {
+                    t: new Date().getTime()
+                },
                 headers: {
                     token: self.token || TOKEN
                 },
