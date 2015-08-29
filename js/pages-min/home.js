@@ -10,7 +10,7 @@ define(function (require, exports, module) {
     var Preview  = require('preview');
 
     var PREFIX = 'http://hemacun.com';
-    var TOKEN  = '085b715f-41d3-4404-b38b-641df5ebba2b';
+    var TOKEN  = 'e61304cd-ed31-4e2f-a87b-fd2b54621384';
 
     //跳转到首页路径
     var firstPageUrl = '/question/index';
@@ -194,11 +194,12 @@ define(function (require, exports, module) {
             });
 
             $motherInfo.delegate('.J_RangeSelector', 'touchend', function(event) {
-                var $this   = $(this);
-                var $hd     = $this.find('.J_RangeSelectorHd');
-                var $ft     = $this.find('.J_RangeSelectorFt');
-                var $button = $this.find('.J_RangeSelectorButton');
-                var offsetX = self.fixOffsetX(event.changedTouches[0].clientX);
+                var $this         = $(this);
+                var $hd           = $this.find('.J_RangeSelectorHd');
+                var $ft           = $this.find('.J_RangeSelectorFt');
+                var $button       = $this.find('.J_RangeSelectorButton');
+                var $commerFooter = $('#J_CommerFooter');
+                var offsetX       = self.fixOffsetX(event.changedTouches[0].clientX);
 
                 var range = (offsetX / self.rangeWidth).toFixed(0);
 
@@ -212,7 +213,11 @@ define(function (require, exports, module) {
                 $button.css('left', left);
 
                 // 开始赋值
-                $this.parents('.J_RadioItem').attr('data-curValue', parseInt(range) + 1)
+                $this.parents('.J_RadioItem').attr('data-curValue', parseInt(range) + 1);
+
+                // 点亮按钮
+                $commerFooter.css('background', '#BCEF00');
+                $commerFooter.addClass('nextVisible');
             });
         },
 
@@ -321,7 +326,7 @@ define(function (require, exports, module) {
                 '</div>'
             ],
             degreeBarTpl: [
-                '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="3" style="display:none;">',
+                '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="" style="display:none;">',
                 '<header><progress value="{{displayId}}" max="10"></progress></header>',
                 '<dl>',
                 '<dt>{{displayId}}.</dt>',
@@ -337,7 +342,7 @@ define(function (require, exports, module) {
                 '<ul>',
                 '<li class="hide">非常不符</li>',
                 '<li class="hide">有点不符</li>',
-                '<li>一般</li>',
+                '<li class="hide">一般</li>',
                 '<li class="hide">有点符合</li>',
                 '<li class="hide">非常符合</li>',
                 '</ul>',
@@ -349,7 +354,7 @@ define(function (require, exports, module) {
                 '<ul>',
                 '<li>非常不符</li>',
                 '<li>有点不符</li>',
-                '<li class="hide">一般</li>',
+                '<li>一般</li>',
                 '<li>有点符合</li>',
                 '<li>非常符合</li>',
                 '</ul>',
@@ -535,6 +540,9 @@ define(function (require, exports, module) {
                         $('.J_MotherPart2').show();
 
                         $mainContent1.hide();
+
+                        $commerFooter.css('background', '#eee');
+                        $commerFooter.removeClass('nextVisible');
                         $contentFt.hide();
                     }else if(parseInt(curId) === ($testPart1.find('.J_RadioItem').length + $testPart2.find('.J_RadioItem').length)){
                         $contentFt.hide();
