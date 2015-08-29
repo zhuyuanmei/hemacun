@@ -10,7 +10,7 @@ define(function (require, exports, module) {
     var Preview  = require('preview');
 
     var PREFIX = 'http://hemacun.com';
-    var TOKEN  = '0e18bfc7-9951-4272-8113-71db6e364b86';
+    var TOKEN  = '2b8e982f-f324-4476-8c1c-3f1b775dcc4c';
 
     //跳转到首页路径
     var firstPageUrl = '/question/index';
@@ -439,7 +439,12 @@ define(function (require, exports, module) {
             });
 
             //昵称交互
-            $motherInfo.delegate('#J_BabyName', 'keyup', function () {
+            $motherInfo.delegate('#J_BabyName', 'focus', function () {
+                $commerFooter.css('background', '#BCEF00');
+                $commerFooter.addClass('nextVisible');
+            });
+
+            $motherInfo.delegate('#J_BabyName', 'blur', function () {
                 var $this = $(this);
                 var $curParent = $this.parents('.J_RadioItem');
 
@@ -628,7 +633,8 @@ define(function (require, exports, module) {
                 $.ajax({
                     url: PREFIX + $this.attr('data-url'),
                     data: {
-                        type: 1
+                        type: 1,
+                        t: new Date().getTime()
                     },
                     success: function (res) {
                         if (res.returnCode == 0) {
@@ -1061,7 +1067,8 @@ define(function (require, exports, module) {
                 url: PREFIX + $mainContent.attr('data-url'),
                 data: {
                     type: 0,
-                    kidId: global.kidId
+                    kidId: global.kidId,
+                    t: new Date().getTime()
                 },
                 success: function (res) {
                     if (res.returnCode == 0) {
