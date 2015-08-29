@@ -42,7 +42,6 @@ define(function(require, exports, module) {
 
                 if(this.settings.setHeader){
                     templates = '<div class="rDialog-wrap">' +
-                        '<a href="javascript:;" class="rDialog-close" title="关闭">x</a>' +
                         '<div class="rDialog-header">'+ this.settings.title +'</div>' +
                         '<div class="rDialog-content">'+ this.settings.content +'</div>' +
                         '<div class="rDialog-footer"></div>' +

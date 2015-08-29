@@ -10,7 +10,7 @@ define(function (require, exports, module) {
     var Preview  = require('preview');
 
     var PREFIX = 'http://hemacun.com';
-    var TOKEN  = 'e61304cd-ed31-4e2f-a87b-fd2b54621384';
+    var TOKEN  = '0e18bfc7-9951-4272-8113-71db6e364b86';
 
     //跳转到首页路径
     var firstPageUrl = '/question/index';
@@ -55,6 +55,7 @@ define(function (require, exports, module) {
         token: Cookie.get('token'),
         prefix: '',
         kidId: '',
+        bindMobile: false,
         optionId: '',
         answerId: '',
         babyData:{},
@@ -72,9 +73,10 @@ define(function (require, exports, module) {
 
                     if (data.kid) {
 
-                        // 保存当前 kid
-                        self.kidId  = data.kid;
-                        self.prefix = data.staticCdnUrlPrefix;
+                        // 保存当前用户数据
+                        self.kidId      = data.kid;
+                        self.prefix     = data.staticCdnUrlPrefix;
+                        self.bindMobile = data.bindMobile; 
 
                         // 绑定答案提交事件
                         self.bind();
@@ -367,11 +369,11 @@ define(function (require, exports, module) {
                 '<div class="login-box">',
                 '<ul>',
                 '<li>',
-                '<input type="text" id="J_Mobile" class="mobile" placeholder="请填写手机号码" data-url="../mockup/json/login.json">',
+                '<input type="text" id="J_Mobile" class="mobile" placeholder="请填写手机号码" data-url="' + PREFIX + '/api/user/login">',
                 '</li>',
                 '<li>',
                 '<input type="text" id="J_CodeNumber" class="code" placeholder="请填写短信密码">',
-                '<a id="J_ValidateCode" class="get-code" data-url="../mockup/json/validateCode.json">获取短信密码</a>',
+                '<a id="J_ValidateCode" class="get-code" data-url="' + PREFIX + '/api/user/sendMobileVerification">获取短信密码</a>',
                 '</li>',
                 '<li id="J_ErrorTip" class="error-tip"></li>',
                 '</ul>',
@@ -405,7 +407,7 @@ define(function (require, exports, module) {
                 '</div>',
                 '</div>'
             ]
-        };
+        };        
 
         //'妈妈测试'交互
         if ($('#J_MotherInfo').length) {
@@ -1132,11 +1134,11 @@ define(function (require, exports, module) {
             });
         }
 
-        //'一键登录'交互
+        
         //倒计时函数
         var countdown;
-        var setTime = function(obj){
-            countdown = Cookie.get("secondsremained");
+        var setTime = function(obj,cookieName){
+            countdown = Cookie.get(cookieName);
             if (countdown == 0) {
                 obj.removeClass('disabled');
                 obj.text('获取短信密码');
@@ -1146,11 +1148,98 @@ define(function (require, exports, module) {
                 obj.addClass('disabled');
                 obj.text(countdown + 's后重新发送');
                 countdown --;
-                Cookie.edit("secondsremained",countdown,countdown+1);
+                Cookie.edit(cookieName,countdown,countdown+1);
             }
-            setTimeout(function(){ setTime(obj) },1000); //每1000毫秒执行一次
+            setTimeout(function(){ setTime(obj,cookieName) },1000); //每1000毫秒执行一次
         };
 
+        //'获取报告'交互
+        if ($('#J_Report').length && !global.bindMobile) {
+            $.preview({
+                    content: Mustache.render(tpl.loginTpl.join('')),
+                    title: '登录提示',
+                    lock: true,
+                    okText: '一键登录',
+                    okCallBack: true,
+                    ok: function () {
+                        var $mobile = $('#J_Mobile');
+                        var $codeNumber = $('#J_CodeNumber');
+                        var $errorTip = $('#J_ErrorTip');
+
+                        if ($.trim($mobile.val()) === '' || !(/^(13[0-9]|14[57]|15[012356789]|18[0-9]|17[0-9])\d{8}$/.test($.trim($mobile.val())))) {
+                            $errorTip.text('请输入正确的手机号码');
+                            $errorTip.show();
+                            return false;
+                        } else if ($.trim($codeNumber.val()) === '') {
+                            $errorTip.text('请输入正确的短信密码');
+                            $errorTip.show();
+                            return false;
+                        } else {
+                            $errorTip.hide();
+                        }
+
+                        if (!($('.rDialog-ok').hasClass('disabled'))) {
+                            $.ajax({
+                                type: 'put',
+                                url: $mobile.attr('data-url'),
+                                data: JSON.stringify({mobile: $mobile.val(), password: $codeNumber.val()}),
+                                dataType: 'json',
+                                contentType: "application/json",
+                                success: function (res) {
+                                    if (res.returnCode == 0) {
+                                        $('.rDialog-mask').hide();
+                                        $('.rDialog').remove();
+                                    } else {
+                                        $errorTip.text(res.msg);
+                                        $errorTip.show();
+                                    }
+                                },
+                                error: function (xhr, type) {
+                                    $errorTip.text('请求服务器异常,稍后再试');
+                                    $errorTip.show();
+                                }
+                            });
+                        }
+                    }
+                });
+
+            $('#J_Report').delegate('#J_ValidateCode','click', function () {
+                var $this = $(this);
+                var $mobile = $('#J_Mobile');
+
+                if(!$this.hasClass('disabled')){
+                    if ($.trim($mobile.val()) === '' || !(/^(13[0-9]|14[57]|15[012356789]|18[0-9]|17[0-9])\d{8}$/.test($.trim($mobile.val())))) {
+                        $('#J_ErrorTip').text('请输入正确的手机号码');
+                        return false;
+                    } else {
+                        $('#J_ErrorTip').text('');
+                    }
+
+                    //获取短信密码ajax请求
+                    $.ajax({
+                        type: 'post',
+                        url: $this.attr('data-url'),
+                        data:  JSON.stringify({mobile: $.trim($mobile.val())}),
+                        dataType: 'json',
+                        contentType: "application/json",
+                        success: function (res) {
+                            if(res.returnCode == 0){
+                                $('#J_ValidateCode').addClass('disabled');
+                            }
+                        },
+                        error: function (xhr, type) {
+                            $('#J_ErrorTip').text('请求服务器异常,稍后再试');
+                        }
+                    });
+
+                    var reportCookieName = 'reportRemained' + $.trim($mobile.val());
+                    Cookie.add(reportCookieName,60,60);//添加cookie记录,有效时间60s
+                    setTime($('#J_ValidateCode'),reportCookieName);//开始倒计时
+                }
+            });
+        }
+
+        //'一键登录'交互
         if ($('#J_Login').length) {
             $('#J_LoginBtn').on('click',function(){
                 $.preview({
@@ -1178,14 +1267,17 @@ define(function (require, exports, module) {
 
                         if (!($('.rDialog-ok').hasClass('disabled'))) {
                             $.ajax({
-                                type: 'post',
+                                type: 'put',
                                 url: $mobile.attr('data-url'),
-                                data: {mobile: $mobile.val(), code: $codeNumber.val()},
+                                data: JSON.stringify({mobile: $mobile.val(), password: $codeNumber.val()}),
                                 dataType: 'json',
+                                contentType: "application/json",
                                 success: function (res) {
-                                    if (res.flag) {
-                                        $('.rDialog-ok').addClass('disabled');
-                                        window.location.href = res.url;
+                                    if (res.returnCode == 0) {
+                                        $('.rDialog-mask').hide();
+                                        $('.rDialog').remove();
+
+                                        $('.footer').hide();
                                     } else {
                                         $errorTip.text(res.msg);
                                         $errorTip.show();
@@ -1217,22 +1309,22 @@ define(function (require, exports, module) {
                     $.ajax({
                         type: 'post',
                         url: $this.attr('data-url'),
-                        data: {mobile: $.trim($mobile.val())},
+                        data:  JSON.stringify({mobile: $.trim($mobile.val())}),
                         dataType: 'json',
+                        contentType: "application/json",
                         success: function (res) {
-                            if(res.flag){
+                            if(res.returnCode == 0){
                                 $('#J_ValidateCode').addClass('disabled');
                             }
-
-                            $('#J_ErrorTip').text(res.msg);
                         },
                         error: function (xhr, type) {
                             $('#J_ErrorTip').text('请求服务器异常,稍后再试');
                         }
                     });
 
-                    Cookie.add("secondsremained",60,60);//添加cookie记录,有效时间60s
-                    setTime($('#J_ValidateCode'));//开始倒计时
+                    var loginCookieName = 'loginRemained' + $.trim($mobile.val());
+                    Cookie.add(loginCookieName,60,60);//添加cookie记录,有效时间60s
+                    setTime($('#J_ValidateCode'),loginCookieName);//开始倒计时
                 }
             });
         }
