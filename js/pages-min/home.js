@@ -409,8 +409,7 @@ define(function (require, exports, module) {
                 '<div class="current-medio">',
                 '{{#hasVideo}}',
                 '<img src="' + global.addPrefix('/images/video.png') + '">',
-                '<video id="J_Video{{rootId}}" preload="auto" style="position:absolute;top:9%;left:4%;width:92%;z-index:10;">',
-                '<source src="' + PREFIX + '/{{videoUrl}}" type="video/mp4" />',
+                '<video id="J_Video{{rootId}}" preload="auto" src="' + PREFIX + '/{{videoUrl}}" style="position:absolute;top:9%;left:4%;width:92%;z-index:10;">',
                 '</video>',
                 '{{/hasVideo}}',
                 '{{#hasAudio}}',
@@ -1039,7 +1038,7 @@ define(function (require, exports, module) {
                 }
 
                 setTimeout(function() {
-                    alert('尝试播放');
+                    alert('尝试播放' + $video[0].attr('src'));
                     $video[0].play();
                     setTimeout(arguments.callee, 5000);
                 }, 5000);
