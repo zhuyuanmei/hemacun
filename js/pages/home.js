@@ -187,6 +187,11 @@ define(function (require, exports, module) {
             var self        = this;
             var $motherInfo = $('#J_MotherInfo');
 
+            $motherInfo.delegate('.J_RangeSelector', 'touchstart', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+            });
+
             $motherInfo.delegate('.J_RangeSelector', 'touchmove', function(event) {
                 var $this   = $(this);
                 var $button = $this.find('.J_RangeSelectorButton');
