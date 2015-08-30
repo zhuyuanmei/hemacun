@@ -999,11 +999,7 @@ define(function (require, exports, module) {
                 $mediaItem.show();
 
                 if ($mediaItem.attr('data-video') === 'true') {
-                    alert('此道题目拥有视频');
-
                     palyVideo(optionId, '', function() {
-                        alert('视频播放完毕回调成功');
-
                         $mediaItem.find('.J_SubmitChoose').addClass('visibleChoose');
                         $mediaItem.find('.J_SubmitChoose').addClass('choose-item');
 
@@ -1034,9 +1030,6 @@ define(function (require, exports, module) {
             var palyVideo = function(optionId, src, callback) {
                 var $video = $('#J_Video' + optionId);
 
-                alert('当前题目ID：' + optionId);
-                alert('当前视频元素：' + $video[0]);
-
                 $video.off('ended').on('ended', function() {
                     callback();
                 });
@@ -1045,7 +1038,10 @@ define(function (require, exports, module) {
                     $video.attr('src', src);
                 }
 
-                $video[0].play();
+                $video.on('play', function() {
+                    alert('可以开始播放');
+                    $video[0].play();
+                });
             };
 
             var playAudio = function(optionId, src, callback) {
