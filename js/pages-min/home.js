@@ -1038,7 +1038,7 @@ define(function (require, exports, module) {
                     $video.attr('src', src);
                 }
 
-                $video.on('play', function() {
+                $video.on('canplay', function() {
                     alert('可以开始播放');
                     $video[0].play();
                 });
