@@ -10,7 +10,7 @@ define(function (require, exports, module) {
     var Preview  = require('preview');
 
     var PREFIX = 'http://hemacun.com';
-    var TOKEN  = '2b8e982f-f324-4476-8c1c-3f1b775dcc4c';
+    var TOKEN  = '57361d6a-a1aa-4952-ba8d-992cf390dadf';
 
     //跳转到首页路径
     var firstPageUrl = '/question/index';
@@ -1081,49 +1081,37 @@ define(function (require, exports, module) {
                         $babyPart1.hide();
                         $mainContent1.show();
 
-                        var sortArr = [];
-                        var partsArr = [];
-                        var splitArr = [];
+                        var sortArr     = [];
+                        var partsArr    = [];
+                        var currentPart = 0;
 
-                        var resultArr = res.body,
-                            resultArrLen = resultArr.length;
+                        var resultArr = res.body;
 
-                        for (var i = 0; i < resultArrLen; i++) {
-                            if (resultArr[i].options[0].templateValue.currentPoint) {
-                                sortArr.push(resultArr[i].id);
+                        resultArr.forEach(function(item, index) {
+
+                            // 关卡
+                            if (item.options[0].templateValue.currentPoint) {
+                                sortArr.push(item.id);
+
+                                currentPart ++;
+                                util['partArr' + currentPart] = {id: currentPart, detailArr:[]};
+
+                            // 题目
                             } else {
-                                if(resultArr[i].options.length === 2){
-                                    partsArr.push({id:resultArr[i].id,medioId:resultArr[i].options[0].id,videoUrl:resultArr[i].options[0].templateValue.videoUrl,audioUrl:resultArr[i].options[0].templateValue.audioUrl,answerId:resultArr[i].options[1].id,answerList:resultArr[i].options[1].templateValue.answers});
-                                }else if(resultArr[i].options.length === 1){
-                                    partsArr.push({id:resultArr[i].id,medioId:resultArr[i].options[0].id,videoUrl:resultArr[i].options[0].templateValue.videoUrl,audioUrl:resultArr[i].options[0].templateValue.audioUrl,type:resultArr[i].options[0].type});
-                                }
+                                partsArr.push({
+                                    id        :item.id,
+                                    medioId   :item.options[0].id,
+                                    videoUrl  :item.options[0].templateValue.videoUrl,
+                                    audioUrl  :item.options[0].templateValue.audioUrl,
+                                    answerId  :item.options[1].id,
+                                    answerList:item.options[1].templateValue.answers
+                                });
 
-                                splitArr.push(resultArr[i].id);
+                                util['partArr' + currentPart].detailArr.push(item.id);
                             }
-                        }
-
-                        //拼装每个模块的id列表
-                        var part1Arr = $.grep(splitArr, function (value) {
-                            return value > sortArr[0] && value < sortArr[1];
-                        });
-
-                        var part2Arr = $.grep(splitArr, function (value) {
-                            return value > sortArr[1] && value < sortArr[2];
-                        });
-
-                        var part3Arr = $.grep(splitArr, function (value) {
-                            return value > sortArr[2] && value < sortArr[3];
-                        });
-
-                        var part4Arr = $.grep(splitArr, function (value) {
-                            return value > sortArr[3];
                         });
 
                         util.partsArr = partsArr;
-                        util.partArr1 = {id:1,detailArr:part1Arr};
-                        util.partArr2 = {id:2,detailArr:part2Arr};
-                        util.partArr3 = {id:3,detailArr:part3Arr};
-                        util.partArr4 = {id:4,detailArr:part4Arr};
 
                         $mainContent.delegate('.J_StartPart', 'click', function() {
                             var $this = $(this);
