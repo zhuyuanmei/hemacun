@@ -409,7 +409,7 @@ define(function (require, exports, module) {
                 '<div class="current-medio">',
                 '{{#hasVideo}}',
                 '<img src="' + global.addPrefix('/images/video.png') + '">',
-                '<video id="J_Video{{rootId}}" style="position:absolute;top:9%;left:4%;width:92%;z-index:10;">',
+                '<video id="J_Video{{rootId}}" preload="auto" style="position:absolute;top:9%;left:4%;width:92%;z-index:10;">',
                 '<source src="' + PREFIX + '/{{videoUrl}}" type="video/mp4" />',
                 '</video>',
                 '{{/hasVideo}}',
