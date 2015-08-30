@@ -80,7 +80,7 @@ define(function (require, exports, module) {
                         // 保存当前用户数据
                         self.kidId      = data.kid;
                         self.prefix     = data.staticCdnUrlPrefix;
-                        self.bindMobile = data.bindMobile; 
+                        self.bindMobile = data.bindMobile;
 
                         // 绑定答案提交事件
                         self.bind();
@@ -430,7 +430,7 @@ define(function (require, exports, module) {
                 '</div>',
                 '</div>'
             ]
-        };        
+        };
 
         //'妈妈测试'交互
         if ($('#J_MotherInfo').length) {
@@ -1039,7 +1039,7 @@ define(function (require, exports, module) {
 
                 setTimeout(function() {
                     alert('尝试播放' + $video.attr('src'));
-                    $video[0].play();
+                    $video.attr('autoplay', 'autoplay');
                     setTimeout(arguments.callee, 5000);
                 }, 5000);
             };
@@ -1163,7 +1163,7 @@ define(function (require, exports, module) {
             });
         }
 
-        
+
         //倒计时函数
         var countdown;
         var setTime = function(obj,cookieName){
