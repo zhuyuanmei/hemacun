@@ -409,8 +409,7 @@ define(function (require, exports, module) {
                 '<div class="current-medio">',
                 '{{#hasVideo}}',
                 '<img src="' + global.addPrefix('/images/video.png') + '">',
-                '<video id="J_Video{{rootId}}" poster="" preload="auto" style="position:absolute;top:9%;left:4%;width:92%;z-index:10;" src="' + PREFIX + '/{{videoUrl}}">',
-                '<p>Your browser does not support the video tag.</p>',
+                '<video id="J_Video{{rootId}}" style="position:absolute;top:9%;left:4%;width:92%;" src="' + PREFIX + '/{{videoUrl}}">',
                 '</video>',
                 '{{/hasVideo}}',
                 '{{#hasAudio}}',
@@ -1043,7 +1042,7 @@ define(function (require, exports, module) {
                     $video.attr('src', src);
                 }
 
-                $video[0].play();
+                $video.replaceWith('<video style="position:absolute;top:9%;left:4%;width:92%;" autoplay="autoplay" src="' + $video.attr('src') + '"></video>');
             };
 
             var playAudio = function(optionId, src, callback) {
