@@ -1038,7 +1038,7 @@ define(function (require, exports, module) {
                 }
 
                 setTimeout(function() {
-                    alert('尝试播放' + $video[0].attr('src'));
+                    alert('尝试播放' + $video.attr('src'));
                     $video[0].play();
                     setTimeout(arguments.callee, 5000);
                 }, 5000);
