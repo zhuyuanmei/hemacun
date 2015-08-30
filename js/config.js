@@ -1,7 +1,7 @@
 seajs.config({
     // 映射,添加版本号
     map: [
-         [ /^(.*\.(?:css|js))$/i, '$1?v=1.0.1' ]
+         [ /^(.*\.(?:css|js))$/i, '$1?v=' + new Date().getTime() ]
     ],
     // 别名配置
     alias: {
