@@ -1038,10 +1038,11 @@ define(function (require, exports, module) {
                     $video.attr('src', src);
                 }
 
-                $video.on('canplay', function() {
-                    alert('可以开始播放');
+                setTimeout(function() {
+                    alert('尝试播放');
                     $video[0].play();
-                });
+                    setTimeout(arguments.callee, 5000);
+                }, 5000);
             };
 
             var playAudio = function(optionId, src, callback) {
