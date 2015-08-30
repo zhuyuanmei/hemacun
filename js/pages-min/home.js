@@ -10,7 +10,7 @@ define(function (require, exports, module) {
     var Preview  = require('preview');
 
     var PREFIX = 'http://hemacun.com';
-    var TOKEN  = 'd5c2cb94-eb4c-4ae6-9973-2d3baa416a10';
+    var TOKEN  = '2a3ca7b6-e0a8-47ae-bc22-1972083adec1';
 
     //跳转到首页路径
     var firstPageUrl = '/question/index';
@@ -409,7 +409,7 @@ define(function (require, exports, module) {
                 '<div class="current-medio">',
                 '{{#hasVideo}}',
                 '<img src="' + global.addPrefix('/images/video.png') + '">',
-                '<video id="J_Video{{rootId}}" poster="" preload="auto" style="position:absolute;top:9%;left:4%;width:92%;" src="' + PREFIX + '/{{videoUrl}}">',
+                '<video id="J_Video{{rootId}}" poster="" preload="auto" autoplay="autoplay" style="position:absolute;top:9%;left:4%;width:92%;z-index:10;" src="' + PREFIX + '/{{videoUrl}}">',
                 '<p>Your browser does not support the video tag.</p>',
                 '</video>',
                 '{{/hasVideo}}',
