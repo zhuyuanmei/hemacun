@@ -189,7 +189,6 @@ define(function (require, exports, module) {
 
             $motherInfo.delegate('.J_RangeSelector', 'touchstart', function(event) {
                 event.preventDefault();
-                event.stopPropagation();
             });
 
             $motherInfo.delegate('.J_RangeSelector', 'touchmove', function(event) {
@@ -198,7 +197,6 @@ define(function (require, exports, module) {
                 var offsetX = self.fixOffsetX(event.changedTouches[0].clientX);
 
                 event.preventDefault();
-                event.stopPropagation();
 
                 $button.css('position', 'absolute');
                 $button.css('left', offsetX);
@@ -215,7 +213,6 @@ define(function (require, exports, module) {
                 var range = (offsetX / self.rangeWidth).toFixed(0);
 
                 event.preventDefault();
-                event.stopPropagation();
 
                 $hd.find('li').addClass('hide').eq(range).removeClass('hide');
                 $ft.find('li').removeClass('hide').eq(range).addClass('hide');
