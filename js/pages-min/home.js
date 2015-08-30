@@ -10,7 +10,7 @@ define(function (require, exports, module) {
     var Preview  = require('preview');
 
     var PREFIX = 'http://hemacun.com';
-    var TOKEN  = '57361d6a-a1aa-4952-ba8d-992cf390dadf';
+    var TOKEN  = 'd5c2cb94-eb4c-4ae6-9973-2d3baa416a10';
 
     //跳转到首页路径
     var firstPageUrl = '/question/index';
@@ -59,6 +59,7 @@ define(function (require, exports, module) {
         optionId: '',
         answerId: '',
         babyData:{},
+        motherData: {},
         init: function() {
             var self = this;
 
@@ -158,6 +159,22 @@ define(function (require, exports, module) {
                 }
             });
         },
+
+        parseMotherData: function(data) {
+            var self = this;
+            var currentPoint;
+
+
+            data.forEach(function(item, index) {
+                if (item.options[0].templateValue.currentPoint) {
+                    currentPoint = item.options[0].templateValue.currentPoint;
+                    self.motherData[currentPoint] = [];
+                } else {
+                    self.motherData[currentPoint].push(item);
+                }
+            });
+        },
+
         parseBabyData: function(data) {
             var self = this;
 
@@ -253,7 +270,7 @@ define(function (require, exports, module) {
         var tpl = {
             answersTpl: [
                 '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="" style="display:none;">',
-                '<header><progress value="{{id}}" max="17"></progress></header>',
+                '<header><div class="progress-bar"><div class="progress-point" style="width:{{progressId}}%"></div></div></header>',
                 '<dl>',
                 '<dt>{{id}}.</dt>',
                 '<dd>',
@@ -269,7 +286,7 @@ define(function (require, exports, module) {
             ],
             yearSelectTpl: [
                 '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="1980" style="display:none;">',
-                '<header><progress value="{{id}}" max="17"></progress></header>',
+                '<header><div class="progress-bar"><div class="progress-point" style="width:{{progressId}}%"></div></div></header>',
                 '<dl>',
                 '<dt>{{id}}.</dt>',
                 '<dd>',
@@ -283,7 +300,7 @@ define(function (require, exports, module) {
             ],
             inputTpl: [
                 '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="" style="display:none;">',
-                '<header><progress value="{{id}}" max="17"></progress></header>',
+                '<header><div class="progress-bar"><div class="progress-point" style="width:{{progressId}}%"></div></div></header>',
                 '<dl>',
                 '<dt>{{id}}.</dt>',
                 '<dd>',
@@ -297,7 +314,7 @@ define(function (require, exports, module) {
             ],
             dateSelectTpl: [
                 '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="" style="display:none;">',
-                '<header><progress value="{{id}}" max="17"></progress></header>',
+                '<header><div class="progress-bar"><div class="progress-point" style="width:{{progressId}}%"></div></div></header>',
                 '<dl>',
                 '<dt>{{id}}.</dt>',
                 '<dd>',
@@ -311,7 +328,7 @@ define(function (require, exports, module) {
             ],
             babyTreeTpl:[
                 '<div class="radio-item baby-tree J_RadioItem" data-id="{{id}}" data-curValue="" style="display:none;">',
-                '<header><progress value="{{id}}" max="17"></progress></header>',
+                '<header><div class="progress-bar"><div class="progress-point" style="width:{{progressId}}%"></div></div></header>',
                 '<dl>',
                 '<dt>{{id}}.</dt>',
                 '<dd>',
@@ -336,7 +353,7 @@ define(function (require, exports, module) {
             ],
             degreeBarTpl: [
                 '<div class="radio-item J_RadioItem" data-id="{{id}}" data-curValue="" style="display:none;">',
-                '<header><progress value="{{displayId}}" max="10"></progress></header>',
+                '<header><div class="progress-bar"><div class="progress-point" style="width:{{progressId}}%"></div></div></header>',
                 '<dl>',
                 '<dt>{{displayId}}.</dt>',
                 '<dd>',
@@ -647,6 +664,7 @@ define(function (require, exports, module) {
                         if (res.returnCode == 0) {
                             $motherPart1.hide();
                             $contentFt.show();
+                            global.parseMotherData(res.body);
 
                             var resultArr = res.body,
                                 resultArrLen = resultArr.length;
@@ -659,6 +677,7 @@ define(function (require, exports, module) {
                                         var answersData = {};
                                         answersData.id = resultArr[i].options[0].id;
                                         answersData.question = resultArr[i].decription;
+                                        answersData.progressId = ((answersData.id / global.motherData[1].length) *100).toFixed(2);
 
                                         answersData.reply = [];
 
@@ -679,6 +698,7 @@ define(function (require, exports, module) {
                                                 var yearSelectData = {};
                                                 yearSelectData.id = resultArr[i].options[0].id;
                                                 yearSelectData.question = resultArr[i].decription;
+                                                yearSelectData.progressId = ((yearSelectData.id / global.motherData[1].length) *100).toFixed(2);
 
                                                 var partContent = Mustache.render(tpl.yearSelectTpl.join(''), yearSelectData);
                                                 $testPart1.append(partContent);
@@ -712,6 +732,7 @@ define(function (require, exports, module) {
                                                 var inputData = {};
                                                 inputData.id = resultArr[i].options[0].id;
                                                 inputData.question = resultArr[i].decription;
+                                                inputData.progressId = ((inputData.id / global.motherData[1].length) *100).toFixed(2);
 
                                                 var partContent = Mustache.render(tpl.inputTpl.join(''), inputData);
                                                 $testPart1.append(partContent);
@@ -721,6 +742,7 @@ define(function (require, exports, module) {
                                                 var dateSelectData = {};
                                                 dateSelectData.id = resultArr[i].options[0].id;
                                                 dateSelectData.question = resultArr[i].decription;
+                                                dateSelectData.progressId = ((dateSelectData.id / global.motherData[1].length) *100).toFixed(2);
 
                                                 var partContent = Mustache.render(tpl.dateSelectTpl.join(''), dateSelectData);
                                                 $testPart1.append(partContent);
@@ -754,6 +776,7 @@ define(function (require, exports, module) {
                                                 var babyTreeData = {};
                                                 babyTreeData.id = resultArr[i].options[0].id;
                                                 babyTreeData.question = resultArr[i].decription;
+                                                babyTreeData.progressId = ((babyTreeData.id / global.motherData[1].length) *100).toFixed(2);
 
                                                 var partContent = Mustache.render(tpl.babyTreeTpl.join(''), babyTreeData);
                                                 $testPart1.append(partContent);
@@ -765,6 +788,7 @@ define(function (require, exports, module) {
                                                 degreeBarData.id = resultArr[i].options[0].id;
                                                 degreeBarData.displayId = resultArr[i].options[0].id - testPart1Arr;
                                                 degreeBarData.question = resultArr[i].decription;
+                                                degreeBarData.progressId = (((degreeBarData.id - global.motherData[1].length) / global.motherData[2].length) *100).toFixed(2);
 
                                                 var partContent = Mustache.render(tpl.degreeBarTpl.join(''), degreeBarData);
                                                 $testPart2.append(partContent);
