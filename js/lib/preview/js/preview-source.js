@@ -280,7 +280,7 @@ define(function(require, exports, module) {
             isDrag: true,
 
             // z-index值
-            zIndex: 9,
+            zIndex: 9999,
 
             //设置弹框背景
             background:'',

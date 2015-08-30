@@ -288,6 +288,7 @@ input {
 .main-module-bd .current-bg {
   position: relative;
   overflow: hidden;
+  width:100%;
 }
 .main-module-bd .current-bg img {
   width: 100%;
@@ -297,6 +298,7 @@ input {
   position: absolute;
   top: 0;
   left: 0;
+  width:100%;
 }
 .choose {
   width: 100%;
