@@ -1034,17 +1034,13 @@ define(function (require, exports, module) {
             var palyVideo = function(optionId, src, callback) {
                 var $video = $('#J_Video' + optionId);
 
-                if (src !== '') {
-                    $video.attr('src', src);
-                }
-
-                $video.replaceWith('<video id="' + $video.attr('id') + '" style="position:absolute;top:9%;left:4%;width:92%;" autoplay="auto" src="' + $video.attr('src') + '"></video>');
-
-                var $video = $('#J_Video' + optionId);
-
                 $video.off('ended').on('ended', function() {
                     callback();
                 });
+
+                if (src !== '') {
+                    $video.attr('src', src);
+                }
 
                 $video[0].play();
             };
