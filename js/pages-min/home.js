@@ -10,7 +10,7 @@ define(function (require, exports, module) {
     var Preview  = require('preview');
 
     var PREFIX = 'http://hemacun.com';
-    var TOKEN  = '2a3ca7b6-e0a8-47ae-bc22-1972083adec1';
+    var TOKEN  = 'c98f17bb-2379-45b2-83ad-3a810c9d369b';
 
     //跳转到首页路径
     var firstPageUrl = '/question/index';
@@ -409,7 +409,8 @@ define(function (require, exports, module) {
                 '<div class="current-medio">',
                 '{{#hasVideo}}',
                 '<img src="' + global.addPrefix('/images/video.png') + '">',
-                '<video id="J_Video{{rootId}}" preload="auto" src="' + PREFIX + '/{{videoUrl}}" style="position:absolute;top:9%;left:4%;width:92%;z-index:10;">',
+                '<video id="J_Video{{rootId}}" poster="" preload="auto" style="position:absolute;top:9%;left:4%;width:92%;z-index:10;" src="' + PREFIX + '/{{videoUrl}}">',
+                '<p>Your browser does not support the video tag.</p>',
                 '</video>',
                 '{{/hasVideo}}',
                 '{{#hasAudio}}',
@@ -857,6 +858,7 @@ define(function (require, exports, module) {
                             background:'true'
                         });
 
+                        $curParent.find('video').hide();
                         $('.rDialog-mask').show();
                     }else{
                         //继续答题浮层
@@ -870,6 +872,7 @@ define(function (require, exports, module) {
                             background:'true'
                         });
 
+                        $curParent.find('video').hide();
                         $('.rDialog-mask').show();
 
                         setTimeout(function(){
@@ -882,6 +885,7 @@ define(function (require, exports, module) {
             //最后关卡处理
             $('#J_MainContent').delegate('.J_LastPage','click',function(){
                 var $this = $(this);
+                var $curParent = $this.parents('.J_MediaItem');
 
                 if($this.attr('data-answer-id') === '1'){
                     var success3Tpl = '<div class="suc-tip suc-tip3" id="J_SucTip"><div><img src="' + global.addPrefix('/images/suc3.png') + '"><a href="'+ byeUrl +'" id="J_Success3" class="next-answer"></a></div></div>';
@@ -894,6 +898,7 @@ define(function (require, exports, module) {
                         background:'true'
                     });
 
+                    $curParent.find('video').hide();
                     $('.rDialog-mask').show();
                 }else{
                     var success4Tpl = '<div class="suc-tip suc-tip4" id="J_SucTip"><div><img src="' + global.addPrefix('/images/suc4.png') + '"><a href="'+ testUrl + '" id="J_Success4" class="next-answer"></a></div></div>';
@@ -906,6 +911,7 @@ define(function (require, exports, module) {
                         background:'true'
                     });
 
+                    $curParent.find('video').hide();
                     $('.rDialog-mask').show();
                 }
             });
@@ -1037,11 +1043,7 @@ define(function (require, exports, module) {
                     $video.attr('src', src);
                 }
 
-                setTimeout(function() {
-                    alert('尝试播放' + $video.attr('src'));
-                    $video.attr('autoplay', 'autoplay');
-                    setTimeout(arguments.callee, 5000);
-                }, 5000);
+                $video[0].play();
             };
 
             var playAudio = function(optionId, src, callback) {
@@ -1211,6 +1213,9 @@ define(function (require, exports, module) {
                         $.ajax({
                             type: 'put',
                             url: $mobile.attr('data-url'),
+                            head: {
+                                token: global.token || TOKEN
+                            },
                             data: JSON.stringify({mobile: $mobile.val(), password: $codeNumber.val()}),
                             dataType: 'json',
                             contentType: "application/json",
@@ -1298,6 +1303,9 @@ define(function (require, exports, module) {
                             $.ajax({
                                 type: 'put',
                                 url: $mobile.attr('data-url'),
+                                head: {
+                                    token: global.token || TOKEN
+                                },
                                 data: JSON.stringify({mobile: $mobile.val(), password: $codeNumber.val()}),
                                 dataType: 'json',
                                 contentType: "application/json",
