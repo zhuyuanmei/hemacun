@@ -409,7 +409,7 @@ define(function (require, exports, module) {
                 '<div class="current-medio">',
                 '{{#hasVideo}}',
                 '<img src="' + global.addPrefix('/images/video.png') + '">',
-                '<video id="J_Video{{rootId}}" poster="" preload="auto" autoplay="autoplay" style="position:absolute;top:9%;left:4%;width:92%;z-index:10;" src="' + PREFIX + '/{{videoUrl}}">',
+                '<video id="J_Video{{rootId}}" style="position:absolute;top:9%;left:4%;width:92%;z-index:10;" src="' + PREFIX + '/{{videoUrl}}">',
                 '<p>Your browser does not support the video tag.</p>',
                 '</video>',
                 '{{/hasVideo}}',

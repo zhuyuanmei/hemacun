@@ -80,7 +80,7 @@ define(function (require, exports, module) {
                         // 保存当前用户数据
                         self.kidId      = data.kid;
                         self.prefix     = data.staticCdnUrlPrefix;
-                        self.bindMobile = data.bindMobile; 
+                        self.bindMobile = data.bindMobile;
 
                         // 绑定答案提交事件
                         self.bind();
@@ -409,7 +409,7 @@ define(function (require, exports, module) {
                 '<div class="current-medio">',
                 '{{#hasVideo}}',
                 '<img src="' + global.addPrefix('/images/video.png') + '">',
-                '<video id="J_Video{{rootId}}" poster="" preload="auto" autoplay="autoplay" style="position:absolute;top:9%;left:4%;width:92%;z-index:10;" src="' + PREFIX + '/{{videoUrl}}">',
+                '<video id="J_Video{{rootId}}" style="position:absolute;top:9%;left:4%;width:92%;z-index:10;" src="' + PREFIX + '/{{videoUrl}}">',
                 '<p>Your browser does not support the video tag.</p>',
                 '</video>',
                 '{{/hasVideo}}',
@@ -431,7 +431,7 @@ define(function (require, exports, module) {
                 '</div>',
                 '</div>'
             ]
-        };        
+        };
 
         //'妈妈测试'交互
         if ($('#J_MotherInfo').length) {
@@ -1124,7 +1124,7 @@ define(function (require, exports, module) {
                                 currentPart ++;
                                 util['partArr' + currentPart] = {id: currentPart, detailArr:[]};
 
-                            // 题目
+                                // 题目
                             } else {
                                 partsArr.push({
                                     id        :item.id,
@@ -1160,7 +1160,7 @@ define(function (require, exports, module) {
             });
         }
 
-        
+
         //倒计时函数
         var countdown;
         var setTime = function(obj,cookieName){
@@ -1182,52 +1182,52 @@ define(function (require, exports, module) {
         //'获取报告'交互
         if ($('#J_Report').length && !global.bindMobile) {
             $.preview({
-                    content: Mustache.render(tpl.loginTpl.join('')),
-                    title: '登录提示',
-                    lock: true,
-                    okText: '一键登录',
-                    okCallBack: true,
-                    ok: function () {
-                        var $mobile = $('#J_Mobile');
-                        var $codeNumber = $('#J_CodeNumber');
-                        var $errorTip = $('#J_ErrorTip');
+                content: Mustache.render(tpl.loginTpl.join('')),
+                title: '登录提示',
+                lock: true,
+                okText: '一键登录',
+                okCallBack: true,
+                ok: function () {
+                    var $mobile = $('#J_Mobile');
+                    var $codeNumber = $('#J_CodeNumber');
+                    var $errorTip = $('#J_ErrorTip');
 
-                        if ($.trim($mobile.val()) === '' || !(/^(13[0-9]|14[57]|15[012356789]|18[0-9]|17[0-9])\d{8}$/.test($.trim($mobile.val())))) {
-                            $errorTip.text('请输入正确的手机号码');
-                            $errorTip.show();
-                            return false;
-                        } else if ($.trim($codeNumber.val()) === '') {
-                            $errorTip.text('请输入正确的短信密码');
-                            $errorTip.show();
-                            return false;
-                        } else {
-                            $errorTip.hide();
-                        }
+                    if ($.trim($mobile.val()) === '' || !(/^(13[0-9]|14[57]|15[012356789]|18[0-9]|17[0-9])\d{8}$/.test($.trim($mobile.val())))) {
+                        $errorTip.text('请输入正确的手机号码');
+                        $errorTip.show();
+                        return false;
+                    } else if ($.trim($codeNumber.val()) === '') {
+                        $errorTip.text('请输入正确的短信密码');
+                        $errorTip.show();
+                        return false;
+                    } else {
+                        $errorTip.hide();
+                    }
 
-                        if (!($('.rDialog-ok').hasClass('disabled'))) {
-                            $.ajax({
-                                type: 'put',
-                                url: $mobile.attr('data-url'),
-                                data: JSON.stringify({mobile: $mobile.val(), password: $codeNumber.val()}),
-                                dataType: 'json',
-                                contentType: "application/json",
-                                success: function (res) {
-                                    if (res.returnCode == 0) {
-                                        $('.rDialog-mask').hide();
-                                        $('.rDialog').remove();
-                                    } else {
-                                        $errorTip.text(res.msg);
-                                        $errorTip.show();
-                                    }
-                                },
-                                error: function (xhr, type) {
-                                    $errorTip.text('请求服务器异常,稍后再试');
+                    if (!($('.rDialog-ok').hasClass('disabled'))) {
+                        $.ajax({
+                            type: 'put',
+                            url: $mobile.attr('data-url'),
+                            data: JSON.stringify({mobile: $mobile.val(), password: $codeNumber.val()}),
+                            dataType: 'json',
+                            contentType: "application/json",
+                            success: function (res) {
+                                if (res.returnCode == 0) {
+                                    $('.rDialog-mask').hide();
+                                    $('.rDialog').remove();
+                                } else {
+                                    $errorTip.text(res.msg);
                                     $errorTip.show();
                                 }
-                            });
-                        }
+                            },
+                            error: function (xhr, type) {
+                                $errorTip.text('请求服务器异常,稍后再试');
+                                $errorTip.show();
+                            }
+                        });
                     }
-                });
+                }
+            });
 
             $('#J_Report').delegate('#J_ValidateCode','click', function () {
                 var $this = $(this);
