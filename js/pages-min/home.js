@@ -1045,6 +1045,8 @@ define(function (require, exports, module) {
                 $video.off('ended').on('ended', function() {
                     callback();
                 });
+
+                $video[0].play();
             };
 
             var playAudio = function(optionId, src, callback) {
