@@ -1038,7 +1038,7 @@ define(function (require, exports, module) {
                     $video.attr('src', src);
                 }
 
-                $video.replaceWith('<video id="' + $video.attr('id') + '" style="position:absolute;top:9%;left:4%;width:92%;" autoplay="autoplay" src="' + $video.attr('src') + '"></video>');
+                $video.replaceWith('<video id="' + $video.attr('id') + '" style="position:absolute;top:9%;left:4%;width:92%;" autoplay="auto" src="' + $video.attr('src') + '"></video>');
 
                 var $video = $('#J_Video' + optionId);
 
