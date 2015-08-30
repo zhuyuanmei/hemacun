@@ -1034,15 +1034,17 @@ define(function (require, exports, module) {
             var palyVideo = function(optionId, src, callback) {
                 var $video = $('#J_Video' + optionId);
 
-                $video.off('ended').on('ended', function() {
-                    callback();
-                });
-
                 if (src !== '') {
                     $video.attr('src', src);
                 }
 
-                $video.replaceWith('<video style="position:absolute;top:9%;left:4%;width:92%;" autoplay="autoplay" src="' + $video.attr('src') + '"></video>');
+                $video.replaceWith('<video id="' + $video.attr('id') + '" style="position:absolute;top:9%;left:4%;width:92%;" autoplay="autoplay" src="' + $video.attr('src') + '"></video>');
+
+                var $video = $('#J_Video' + optionId);
+
+                $video.off('ended').on('ended', function() {
+                    callback();
+                });
             };
 
             var playAudio = function(optionId, src, callback) {
