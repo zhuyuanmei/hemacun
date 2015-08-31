@@ -1283,7 +1283,7 @@ define(function (require, exports, module) {
                             $.ajax({
                                 type: 'put',
                                 url: $mobile.attr('data-url'),
-                                head: {
+                                headers: {
                                     token: global.token || TOKEN
                                 },
                                 data: JSON.stringify({mobile: $mobile.val(), password: $codeNumber.val()}),
@@ -1373,7 +1373,7 @@ define(function (require, exports, module) {
                             $.ajax({
                                 type: 'put',
                                 url: $mobile.attr('data-url'),
-                                head: {
+                                headers: {
                                     token: global.token || TOKEN
                                 },
                                 data: JSON.stringify({mobile: $mobile.val(), password: $codeNumber.val()}),
