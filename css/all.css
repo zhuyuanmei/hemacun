@@ -310,7 +310,7 @@ input {
 .choose ul li {
   width: 50%;
   float: left;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   position:relative;
 }
 .choose li a {
@@ -327,6 +327,21 @@ input {
   position:absolute;
   bottom:-10%;
   left:50%;
+}
+.complex-media-item ul li{
+  margin-bottom:65px;
+}
+.complex-media-item .choose .answer-audio{
+  display:none;
+  position:absolute;
+  bottom:-55%;
+  left:50%;
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  margin-left:-25px;
+  background:url('../images/audio_auto.png') no-repeat;
+  background-size:100% 100%;
 }
 .main-module-bd .current-bg .choose a img {
   width: 80%;
