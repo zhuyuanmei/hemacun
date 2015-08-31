@@ -429,6 +429,42 @@ define(function (require, exports, module) {
                 '{{/hasAnswerId}}',
                 '</div>',
                 '</div>'
+            ],
+            complexVideoTpl:[
+                '<div id="J_MediaItem{{rootId}}" class="media-item complex-media-item J_MediaItem current-bg" data-id="{{rootId}}" data-medioId="{{medioId}}" {{#hasAnswerId}}data-answerId="{{answerId}}"{{/hasAnswerId}} data-arrLength="{{arrLength}}" data-currentIndex="{{currentIndex}}" data-video="{{hasVideo}}" data-audio="{{hasAudio}}" {{#hasAnswerAudio}}data-answerAudio="true"{{/hasAnswerAudio}} style="">',
+                '<img src="' + global.addPrefix('/images/bg.jpg') + '">',
+                '<div class="current-medio">',
+                '{{#hasVideo}}',
+                '<img src="' + global.addPrefix('/images/video.png') + '">',
+                '<video id="J_Video{{rootId}}" style="position:absolute;top:9%;left:4%;width:92%;" src="' + PREFIX + '/{{videoUrl}}">',
+                '</video>',
+                '{{/hasVideo}}',
+                '{{#hasAudio}}',
+                '<img src="' + global.addPrefix('/images/audio.png') + '">',
+                '<audio id="J_Audio{{rootId}}" src="' + PREFIX + '/{{audioUrl}}">',
+                'Your browser does not support the audio tag.',
+                '</audio>',
+                '{{/hasAudio}}',
+                '{{#hasAnswerId}}',
+                '<div class="choose">',
+                '<ul>',
+                '{{#answerList}}',
+                '<li>',
+                '<a href="javascript:;" class="J_SubmitChoose" data-option-id="{{rootId}}" data-answer-id="{{id}}"><img src="' + PREFIX + '/{{imageUrl}}"></a>',
+                '{{#hasAnswerAudio}}',
+                '<div class="answer-audio J_AnswerAudio">',
+                '<audio id="J_Audio{{id}}" src="{{audioUrl}}">',
+                'Your browser does not support the audio tag.',
+                '</audio>',
+                '</div>',
+                '{{/hasAnswerAudio}}',
+                '</li>',
+                '{{/answerList}}',
+                '</ul>',
+                '</div>',
+                '{{/hasAnswerId}}',
+                '</div>',
+                '</div>'
             ]
         };
 
@@ -836,6 +872,22 @@ define(function (require, exports, module) {
             var $testPart3 = $('#J_TestPart3');
             var $testPart4 = $('#J_TestPart4');
 
+            //答案列表中选择音频播放交互
+            $('#J_MainContent').delegate('.J_AnswerAudio','click',function(){
+                var $this = $(this);
+                var $curAudio = $this.find('audio');
+                var $curParent = $this.parents('li');
+
+                $(this).css({'background':'url("../images/audio_click.png") no-repeat','background-size':'100% 100%'});
+
+                $curAudio.off('ended').on('ended', function() {
+                    $curParent.find('.J_SubmitChoose').addClass('visibleChoose');
+                    $curParent.find('.J_SubmitChoose').addClass('choose-item');
+                });
+
+                $curAudio[0].play();
+            });
+
             //medio完成后的点击交互
             $('#J_MainContent').delegate('.J_SubmitChoose','click',function(){
                 var $this = $(this);
@@ -964,6 +1016,13 @@ define(function (require, exports, module) {
                             if (partsArr[i].answerId) {
                                 partData.answerId = partsArr[i].answerId;
                                 partData.answerList = partsArr[i].answerList;
+                                
+                                if(partsArr[i].answerList[0].audioUrl){
+                                    partData.hasAnswerAudio = true;
+                                }else{
+                                    partData.hasAnswerAudio = false;
+                                }
+                                
                                 partData.hasAnswerId = true;
                             } else {
                                 partData.hasAnswerId = false;
@@ -983,7 +1042,15 @@ define(function (require, exports, module) {
                                 partData.hasAudio = false;
                             }
 
-                            var html = Mustache.render(tpl.videoTpl.join(''), partData);
+                            var html = '';
+                            
+                            if(partData.hasAnswerAudio){
+                                //复杂媒体模板
+                                html = Mustache.render(tpl.complexVideoTpl.join(''), partData);
+                            }else{
+                                //简易媒体模板
+                                html = Mustache.render(tpl.videoTpl.join(''), partData);
+                            }
 
                             $testPart.append(html);
                         }
@@ -1004,9 +1071,13 @@ define(function (require, exports, module) {
 
                 if ($mediaItem.attr('data-video') === 'true') {
                     palyVideo(optionId, '', function() {
-                        $mediaItem.find('.J_SubmitChoose').addClass('visibleChoose');
-                        $mediaItem.find('.J_SubmitChoose').addClass('choose-item');
-
+                        if($mediaItem.attr('data-answerAudio') === 'true'){
+                            $mediaItem.find('.J_AnswerAudio').show();
+                        }else{
+                           $mediaItem.find('.J_SubmitChoose').addClass('visibleChoose');
+                           $mediaItem.find('.J_SubmitChoose').addClass('choose-item'); 
+                        }
+                        
                         var question = global.babyData[optionId];
                         var options  = question.options;
 
