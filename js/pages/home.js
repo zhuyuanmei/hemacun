@@ -453,7 +453,7 @@ define(function (require, exports, module) {
                 '<a href="javascript:;" class="J_SubmitChoose" data-option-id="{{rootId}}" data-answer-id="{{id}}"><img src="' + PREFIX + '/{{imageUrl}}"></a>',
                 '{{#hasAnswerAudio}}',
                 '<div class="answer-audio J_AnswerAudio">',
-                '<audio id="J_Audio{{id}}" src="{{audioUrl}}">',
+                '<audio id="J_Audio{{id}}" src="' + PREFIX + '/{{audioUrl}}">',
                 'Your browser does not support the audio tag.',
                 '</audio>',
                 '</div>',
