@@ -1307,7 +1307,7 @@ define(function (require, exports, module) {
                 }
             });
 
-            $('#J_Report').delegate('#J_ValidateCode','click', function () {
+            $('#J_Report').delegate('#J_ValidateCode','tap', function () {
                 var $this = $(this);
                 var $mobile = $('#J_Mobile');
 
@@ -1400,7 +1400,7 @@ define(function (require, exports, module) {
                 });
             });
 
-            $('#J_Login').delegate('#J_ValidateCode','click', function () {
+            $('#J_Login').delegate('#J_ValidateCode','tap', function () {
                 var $this = $(this);
                 var $mobile = $('#J_Mobile');
 
