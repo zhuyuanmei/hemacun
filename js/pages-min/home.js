@@ -1010,7 +1010,7 @@ define(function (require, exports, module) {
                             partData.arrLength = partArr.detailArr.length;
                             partData.currentIndex = currentIndex;
 
-                            partData.rootId = partsArr[i].medioId;
+                            partData.rootId = partsArr[i].id;
                             partData.medioId = partsArr[i].medioId;
 
                             if (partsArr[i].answerId) {
@@ -1202,7 +1202,7 @@ define(function (require, exports, module) {
                                 // 题目
                             } else {
                                 partsArr.push({
-                                    id        :item.id,
+                                    id        :item.options[1].id,
                                     medioId   :item.options[0].id,
                                     videoUrl  :item.options[0].templateValue.videoUrl,
                                     audioUrl  :item.options[0].templateValue.audioUrl,
