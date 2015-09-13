@@ -422,7 +422,7 @@ define(function (require, exports, module) {
                 '<div class="choose">',
                 '<ul>',
                 '{{#answerList}}',
-                '<li><a href="javascript:;" class="J_SubmitChoose" data-option-id="{{rootId}}" data-answer-id="{{id}}"><img src="' + PREFIX + '/{{imageUrl}}"></a></li>',
+                '<li><a href="javascript:;" class="J_SubmitChoose" data-option-id="{{answerId}}" data-answer-id="{{id}}"><img src="' + PREFIX + '/{{imageUrl}}"></a></li>',
                 '{{/answerList}}',
                 '</ul>',
                 '</div>',
@@ -450,7 +450,7 @@ define(function (require, exports, module) {
                 '<ul>',
                 '{{#answerList}}',
                 '<li>',
-                '<a href="javascript:;" class="J_SubmitChoose" data-option-id="{{rootId}}" data-answer-id="{{id}}"><img src="' + PREFIX + '/{{imageUrl}}"></a>',
+                '<a href="javascript:;" class="J_SubmitChoose" data-option-id="{{answerId}}" data-answer-id="{{id}}"><img src="' + PREFIX + '/{{imageUrl}}"></a>',
                 '{{#hasAnswerAudio}}',
                 '<div class="answer-audio J_AnswerAudio">',
                 '<audio id="J_Audio{{id}}" src="' + PREFIX + '/{{audioUrl}}">',
@@ -1202,7 +1202,7 @@ define(function (require, exports, module) {
                                 // 题目
                             } else {
                                 partsArr.push({
-                                    id        :item.options[1].id,
+                                    id        :item.id,
                                     medioId   :item.options[0].id,
                                     videoUrl  :item.options[0].templateValue.videoUrl,
                                     audioUrl  :item.options[0].templateValue.audioUrl,
