@@ -1010,7 +1010,7 @@ define(function (require, exports, module) {
                             partData.arrLength = partArr.detailArr.length;
                             partData.currentIndex = currentIndex;
 
-                            partData.rootId = partsArr[i].id;
+                            partData.rootId = partsArr[i].options[0].id;
                             partData.medioId = partsArr[i].medioId;
 
                             if (partsArr[i].answerId) {
