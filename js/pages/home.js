@@ -422,7 +422,7 @@ define(function (require, exports, module) {
                 '<div class="choose">',
                 '<ul>',
                 '{{#answerList}}',
-                '<li><a href="javascript:;" class="J_SubmitChoose" data-option-id="{{rootId}}" data-answer-id="{{id}}"><img src="' + PREFIX + '/{{imageUrl}}"></a></li>',
+                '<li><a href="javascript:;" class="J_SubmitChoose" data-option-id="{{answerId}}" data-answer-id="{{id}}"><img src="' + PREFIX + '/{{imageUrl}}"></a></li>',
                 '{{/answerList}}',
                 '</ul>',
                 '</div>',
@@ -450,7 +450,7 @@ define(function (require, exports, module) {
                 '<ul>',
                 '{{#answerList}}',
                 '<li>',
-                '<a href="javascript:;" class="J_SubmitChoose" data-option-id="{{rootId}}" data-answer-id="{{id}}"><img src="' + PREFIX + '/{{imageUrl}}"></a>',
+                '<a href="javascript:;" class="J_SubmitChoose" data-option-id="{{answerId}}" data-answer-id="{{id}}"><img src="' + PREFIX + '/{{imageUrl}}"></a>',
                 '{{#hasAnswerAudio}}',
                 '<div class="answer-audio J_AnswerAudio">',
                 '<audio id="J_Audio{{id}}" src="' + PREFIX + '/{{audioUrl}}">',
@@ -1016,13 +1016,13 @@ define(function (require, exports, module) {
                             if (partsArr[i].answerId) {
                                 partData.answerId = partsArr[i].answerId;
                                 partData.answerList = partsArr[i].answerList;
-                                
+
                                 if(partsArr[i].answerList[0].audioUrl){
                                     partData.hasAnswerAudio = true;
                                 }else{
                                     partData.hasAnswerAudio = false;
                                 }
-                                
+
                                 partData.hasAnswerId = true;
                             } else {
                                 partData.hasAnswerId = false;
@@ -1043,7 +1043,7 @@ define(function (require, exports, module) {
                             }
 
                             var html = '';
-                            
+
                             if(partData.hasAnswerAudio){
                                 //复杂媒体模板
                                 html = Mustache.render(tpl.complexVideoTpl.join(''), partData);
@@ -1074,10 +1074,10 @@ define(function (require, exports, module) {
                         if($mediaItem.attr('data-answerAudio') === 'true'){
                             $mediaItem.find('.J_AnswerAudio').show();
                         }else{
-                           $mediaItem.find('.J_SubmitChoose').addClass('visibleChoose');
-                           $mediaItem.find('.J_SubmitChoose').addClass('choose-item'); 
+                            $mediaItem.find('.J_SubmitChoose').addClass('visibleChoose');
+                            $mediaItem.find('.J_SubmitChoose').addClass('choose-item');
                         }
-                        
+
                         var question = global.babyData[optionId];
                         var options  = question.options;
 
@@ -1199,10 +1199,10 @@ define(function (require, exports, module) {
                                 currentPart ++;
                                 util['partArr' + currentPart] = {id: currentPart, detailArr:[]};
 
-                            // 题目
+                                // 题目
                             } else {
                                 partsArr.push({
-                                    id        :item.options[1].id,
+                                    id        :item.id,
                                     medioId   :item.options[0].id,
                                     videoUrl  :item.options[0].templateValue.videoUrl,
                                     audioUrl  :item.options[0].templateValue.audioUrl,
@@ -1257,55 +1257,55 @@ define(function (require, exports, module) {
         //'获取报告'交互
         if ($('#J_Report').length && !global.bindMobile) {
             $.preview({
-                    content: Mustache.render(tpl.loginTpl.join('')),
-                    title: '登录提示',
-                    lock: true,
-                    okText: '一键登录',
-                    okCallBack: true,
-                    ok: function () {
-                        var $mobile = $('#J_Mobile');
-                        var $codeNumber = $('#J_CodeNumber');
-                        var $errorTip = $('#J_ErrorTip');
+                content: Mustache.render(tpl.loginTpl.join('')),
+                title: '登录提示',
+                lock: true,
+                okText: '一键登录',
+                okCallBack: true,
+                ok: function () {
+                    var $mobile = $('#J_Mobile');
+                    var $codeNumber = $('#J_CodeNumber');
+                    var $errorTip = $('#J_ErrorTip');
 
-                        if ($.trim($mobile.val()) === '' || !(/^(13[0-9]|14[57]|15[012356789]|18[0-9]|17[0-9])\d{8}$/.test($.trim($mobile.val())))) {
-                            $errorTip.text('请输入正确的手机号码');
-                            $errorTip.show();
-                            return false;
-                        } else if ($.trim($codeNumber.val()) === '') {
-                            $errorTip.text('请输入正确的短信密码');
-                            $errorTip.show();
-                            return false;
-                        } else {
-                            $errorTip.hide();
-                        }
+                    if ($.trim($mobile.val()) === '' || !(/^(13[0-9]|14[57]|15[012356789]|18[0-9]|17[0-9])\d{8}$/.test($.trim($mobile.val())))) {
+                        $errorTip.text('请输入正确的手机号码');
+                        $errorTip.show();
+                        return false;
+                    } else if ($.trim($codeNumber.val()) === '') {
+                        $errorTip.text('请输入正确的短信密码');
+                        $errorTip.show();
+                        return false;
+                    } else {
+                        $errorTip.hide();
+                    }
 
-                        if (!($('.rDialog-ok').hasClass('disabled'))) {
-                            $.ajax({
-                                type: 'put',
-                                url: $mobile.attr('data-url'),
-                                headers: {
-                                    token: global.token || TOKEN
-                                },
-                                data: JSON.stringify({mobile: $mobile.val(), password: $codeNumber.val()}),
-                                dataType: 'json',
-                                contentType: "application/json",
-                                success: function (res) {
-                                    if (res.returnCode == 0) {
-                                        $('.rDialog-mask').hide();
-                                        $('.rDialog').remove();
-                                    } else {
-                                        $errorTip.text(res.msg);
-                                        $errorTip.show();
-                                    }
-                                },
-                                error: function (xhr, type) {
-                                    $errorTip.text('请求服务器异常,稍后再试');
+                    if (!($('.rDialog-ok').hasClass('disabled'))) {
+                        $.ajax({
+                            type: 'put',
+                            url: $mobile.attr('data-url'),
+                            headers: {
+                                token: global.token || TOKEN
+                            },
+                            data: JSON.stringify({mobile: $mobile.val(), password: $codeNumber.val()}),
+                            dataType: 'json',
+                            contentType: "application/json",
+                            success: function (res) {
+                                if (res.returnCode == 0) {
+                                    $('.rDialog-mask').hide();
+                                    $('.rDialog').remove();
+                                } else {
+                                    $errorTip.text(res.msg);
                                     $errorTip.show();
                                 }
-                            });
-                        }
+                            },
+                            error: function (xhr, type) {
+                                $errorTip.text('请求服务器异常,稍后再试');
+                                $errorTip.show();
+                            }
+                        });
                     }
-                });
+                }
+            });
 
             $('#J_Report').delegate('#J_ValidateCode','tap', function () {
                 var $this = $(this);
