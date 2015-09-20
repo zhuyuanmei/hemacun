@@ -54,6 +54,7 @@ define(function (require, exports, module) {
     var global = {
         token: Cookie.get('token'),
         prefix: '',
+        uid  : '',
         kidId: '',
         bindMobile: false,
         optionId: '',
@@ -78,6 +79,7 @@ define(function (require, exports, module) {
                     if (data.kid) {
 
                         // 保存当前用户数据
+                        self.uid        = data.currentUid;
                         self.kidId      = data.kid;
                         self.prefix     = data.staticCdnUrlPrefix;
                         self.bindMobile = data.bindMobile;
@@ -155,7 +157,34 @@ define(function (require, exports, module) {
                 },
                 dataType: 'json',
                 success: function (res) {
-
+                    if (res.returnCode !== 0) {
+                        $.ajax({
+                            url : PREFIX + '/api/report',
+                            data: {
+                                userId : self.uid,
+                                code   : res.returnCode,
+                                message: 'error'
+                            },
+                            type: 'post',
+                            success: function (res) {
+                                
+                            }
+                        });
+                    }
+                },
+                error: function() {
+                    $.ajax({
+                        url : PREFIX + '/api/report',
+                        data: {
+                            userId : self.uid,
+                            code   : 0,
+                            message: 'timeout'
+                        },
+                        type: 'post',
+                        success: function (res) {
+                            
+                        }
+                    });
                 }
             });
         },
